@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.349.3",
+            "version": "3.346.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "b2d4718786398f47626add9c29840fc416175ef2"
+                "reference": "d1403b5a39af7ab7af4fc538deb33013c19c8d33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b2d4718786398f47626add9c29840fc416175ef2",
-                "reference": "b2d4718786398f47626add9c29840fc416175ef2",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d1403b5a39af7ab7af4fc538deb33013c19c8d33",
+                "reference": "d1403b5a39af7ab7af4fc538deb33013c19c8d33",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +153,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.349.3"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.346.2"
             },
-            "time": "2025-07-09T18:10:17+00:00"
+            "time": "2025-06-20T18:10:21+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -290,16 +290,16 @@
         },
         {
             "name": "botble/api",
-            "version": "2.1.14",
+            "version": "2.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/botble/api.git",
-                "reference": "b37d1b24ba5a4b95cafb0f67a778c7dfd84eb865"
+                "reference": "3dfedbaf5e92dd85eae4036e93c628062e7cbe72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/botble/api/zipball/b37d1b24ba5a4b95cafb0f67a778c7dfd84eb865",
-                "reference": "b37d1b24ba5a4b95cafb0f67a778c7dfd84eb865",
+                "url": "https://api.github.com/repos/botble/api/zipball/3dfedbaf5e92dd85eae4036e93c628062e7cbe72",
+                "reference": "3dfedbaf5e92dd85eae4036e93c628062e7cbe72",
                 "shasum": ""
             },
             "require": {
@@ -346,9 +346,9 @@
             ],
             "support": {
                 "issues": "https://github.com/botble/api/issues",
-                "source": "https://github.com/botble/api/tree/2.1.14"
+                "source": "https://github.com/botble/api/tree/2.1.4"
             },
-            "time": "2025-07-08T05:09:26+00:00"
+            "time": "2025-06-21T08:26:58+00:00"
         },
         {
             "name": "botble/assets",
@@ -495,7 +495,7 @@
         },
         {
             "name": "botble/get-started",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/get-started",
@@ -521,7 +521,7 @@
         },
         {
             "name": "botble/installer",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/installer",
@@ -550,7 +550,7 @@
         },
         {
             "name": "botble/menu",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/menu",
@@ -583,7 +583,7 @@
         },
         {
             "name": "botble/optimize",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/optimize",
@@ -615,7 +615,7 @@
         },
         {
             "name": "botble/page",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/page",
@@ -645,7 +645,7 @@
         },
         {
             "name": "botble/platform",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/core",
@@ -751,7 +751,7 @@
         },
         {
             "name": "botble/plugin-management",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/plugin-management",
@@ -780,7 +780,7 @@
         },
         {
             "name": "botble/revision",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/revision",
@@ -809,7 +809,7 @@
         },
         {
             "name": "botble/seo-helper",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/seo-helper",
@@ -842,7 +842,7 @@
         },
         {
             "name": "botble/shortcode",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/shortcode",
@@ -874,7 +874,7 @@
         },
         {
             "name": "botble/sitemap",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/sitemap",
@@ -903,7 +903,7 @@
         },
         {
             "name": "botble/slug",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/slug",
@@ -935,7 +935,7 @@
         },
         {
             "name": "botble/theme",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/theme",
@@ -976,7 +976,7 @@
         },
         {
             "name": "botble/widget",
-            "version": "dev-yazil",
+            "version": "dev-dev",
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/widget",
@@ -6411,16 +6411,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.46",
+            "version": "3.0.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "56483a7de62a6c2a6635e42e93b8a9e25d4f0ec6"
+                "reference": "bd81b90d5963c6b9d87de50357585375223f4dd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/56483a7de62a6c2a6635e42e93b8a9e25d4f0ec6",
-                "reference": "56483a7de62a6c2a6635e42e93b8a9e25d4f0ec6",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/bd81b90d5963c6b9d87de50357585375223f4dd8",
+                "reference": "bd81b90d5963c6b9d87de50357585375223f4dd8",
                 "shasum": ""
             },
             "require": {
@@ -6501,7 +6501,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.46"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.45"
             },
             "funding": [
                 {
@@ -6517,7 +6517,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-06-26T16:29:55+00:00"
+            "time": "2025-06-22T22:54:43+00:00"
         },
         {
             "name": "predis/predis",

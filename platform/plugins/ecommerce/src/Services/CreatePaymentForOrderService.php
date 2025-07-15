@@ -230,7 +230,7 @@ class CreatePaymentForOrderService
                                                                                                                             <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">'.$value->qty.'</div>
                                                                                                                         </td>
                                                                                                                         <td style="color:#636363;text-align:left;vertical-align:middle;padding:12px;border:1px solid #E5E5E5;">
-                                                                                                                            <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">&#x062F;&#x002E;&#x0643;'.number_format(((float) ($value->price * 1) * $value->qty), 3, '.', '').'</div>
+                                                                                                                           <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">&#x62F;&#x2E;&#x625;'.number_format(((float) ($value->gross_amount)), 3, '.', '').'</div>
                                                                                                                         </td>
                                                                                                                         </tr>';
                                                                                                                       }
