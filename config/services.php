@@ -30,6 +30,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    
+    'shipsy' => [
+        'api_key' => env('SHipsy_API_KEY'),
+    ],
 
     'resend' => [
         'key' => env('RESEND_KEY'),

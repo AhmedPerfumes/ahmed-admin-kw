@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Botble\Ecommerce\Models\Customer;
 use Illuminate\Support\Facades\Auth;
@@ -27,9 +29,127 @@ use Botble\Ecommerce\Models\MobileVerification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Botble\Ecommerce\Models\Currency;
+use Throwable;
 
 class OrderController extends Controller
 {
+    private function prepareShipsyPayload(Order $order, array $products, $customer, OrderAddress $orderAddress, string $paymentMethod): array
+    {
+                $payload = [
+            "action_type" => "delivery",
+            "consignment_type" => "forward",
+            "movement_type" => "forward",
+            "load_type" => "NON-DOCUMENT",
+            "description" => "Order #10009470 containing 5 perfume products.",
+            "customer_code" => "",
+            "reference_number" => "",
+            "service_type_id" => "PREMIUM",
+            "hub_code" => "BOOKINGHUB",
+            "cod_amount" => "688.00",
+            "invoice_amount" => "675.00",
+            "invoice_number" => "10009470",
+            "invoice_date" => "2025-10-02",
+            "declared_value" => 675,
+            "num_pieces" => 5,
+            "customer_reference_number" => "",
+            "cod_favor_of" => "Your Company Name",
+            "cod_collection_mode" => "cash",
+            "dimension_unit" => "cm",
+            "length" => "30",
+            "width" => "20",
+            "height" => "15",
+            "weight_unit" => "kg",
+            "weight" => "2.5",
+            "origin_details" => [
+                "name" => "Your Warehouse Name",
+                "phone" => "YOUR_WAREHOUSE_PHONE",
+                "address_line_1" => "Street 123, Industrial Area",
+                "pincode" => "00000",
+                "city" => "Ajman",
+                "state" => "Ajman",
+                "country" => "United Arab Emirates"
+            ],
+            "destination_details" => [
+                "name" => "سشخخيي لاشقث Test",
+                "phone" => "0569177683",
+                "alternate_phone" => "",
+                "address_line_1" => "لاشؤ",
+                "address_line_2" => "ببب",
+                "pincode" => "00000",
+                "city" => "Ajman",
+                "state" => "Ajman",
+                "country" => "United Arab Emirates"
+            ],
+            "return_details" => [
+                "name" => "Your Warehouse Name",
+                "phone" => "YOUR_WAREHOUSE_PHONE",
+                "address_line_1" => "Street 123, Industrial Area",
+                "pincode" => "00000",
+                "city" => "Ajman",
+                "state" => "Ajman",
+                "country" => "United Arab Emirates"
+            ],
+            "nodes" => [
+                [
+                    "courier_partner" => "BLUEDART",
+                    "courier_accounts" => "Bluedart_ggn_mum",
+                    "declared_value" => "675",
+                    "mode" => "shipment",
+                    "node_type" => "FM"
+                ]
+            ],
+            "pieces_detail" => [
+                [
+                    "description" => "Marj",
+                    "declared_value" => "165.00",
+                    "weight" => "0.5",
+                    "height" => "12",
+                    "length" => "8",
+                    "width" => "8",
+                    "piece_product_code" => "49",
+                    "product_code" => "49"
+                ],
+                [
+                    "description" => "Bidun Esam",
+                    "declared_value" => "60.00",
+                    "weight" => "0.5",
+                    "height" => "12",
+                    "length" => "8",
+                    "width" => "8",
+                    "piece_product_code" => "32"
+                ],
+                [
+                    "description" => "Bin Shaikh",
+                    "declared_value" => "215.00",
+                    "weight" => "0.5",
+                    "height" => "12",
+                    "length" => "8",
+                    "width" => "8",
+                    "piece_product_code" => "34"
+                ],
+                [
+                    "description" => "Laathani",
+                    "declared_value" => "175.00",
+                    "weight" => "0.5",
+                    "height" => "12",
+                    "length" => "8",
+                    "width" => "8",
+                    "piece_product_code" => "45"
+                ],
+                [
+                    "description" => "Oud AMG",
+                    "declared_value" => "60.00",
+                    "weight" => "0.5",
+                    "height" => "12",
+                    "length" => "8",
+                    "width" => "8",
+                    "piece_product_code" => "54"
+                ]
+            ]
+        ];
+
+        return $payload;
+    }
     public function storeOrder(Request $request, CreatePaymentForOrderService $createPaymentForOrderService) {
 
         $validator = Validator::make($request->all(), [
@@ -227,6 +347,7 @@ class OrderController extends Controller
         // echo "<pre>";print_r($order);die();
 
         if($order) {
+            $finalOrderAddress = null;
 
             if($request->input('customer_id')) {
                 $loggedInCustomer = Customer::where('id', $request->input('customer_id'))->first();
@@ -244,7 +365,7 @@ class OrderController extends Controller
                     ]);
                     $loggedInCustomerAdd = Address::where('customer_id', $loggedInCustomer->id)->first();
                 }
-                OrderAddress::query()->create([
+                $finalOrderAddress = OrderAddress::query()->create([
                     'name' => $request->input('shippingAddress.first_name') ? $request->input('shippingAddress.first_name').' '.$request->input('shippingAddress.last_name') : $loggedInCustomer->name,
                     'phone' => $request->input('shippingAddress.mobile') ? $request->input('shippingAddress.mobile') : $loggedInCustomer->phone,
                     'email' => $request->input('shippingAddress.email') ? $request->input('shippingAddress.email') : $loggedInCustomer->email,
@@ -275,7 +396,7 @@ class OrderController extends Controller
                 }
 
             } else {
-                OrderAddress::query()->create([
+                $finalOrderAddress = OrderAddress::query()->create([
                     'name' => $request->input('shippingAddress.first_name') ? $request->input('shippingAddress.first_name').' '.$request->input('shippingAddress.last_name') : $request->input('billingAddress.first_name').' '.$request->input('billingAddress.last_name'),
                     'phone' => $request->input('shippingAddress.mobile') ? $request->input('shippingAddress.mobile') : $request->input('billingAddress.mobile'),
                     'email' => $request->input('shippingAddress.email') ? $request->input('shippingAddress.email') : $request->input('billingAddress.email'),
@@ -768,6 +889,55 @@ class OrderController extends Controller
                 'completed',
                 $customer_id
             );
+
+            
+            // =================================================================
+            // START: SHipsy Soft Data Upload Integration
+            // =================================================================
+            try {
+                // Step 1: Get the Shipsy API Key from your environment variables.
+                // It's crucial to store secrets like API keys in your .env file, not in the code.
+                $shipsyApiKey = config('services.shipsy.api_key');
+                
+                if ($shipsyApiKey) {
+                    // Step 2: Prepare the payload using our helper function.
+                    $shipsyPayload = $this->prepareShipsyPayload($order, $prod, $loggedInCustomer, $finalOrderAddress, $request->input('payment_method'));
+                    Log::info('Preparing to send payload to Shipsy for order ' . $order->code, ['payload' => $shipsyPayload]);
+
+                    // Step 3: Make the API call to Shipsy.
+                    $shipsyApiUrl = "https://app.shipsy.in/api/customer/integration/consignment/upload/softdata/v2";
+                    
+                    $response = Http::withHeaders([
+                        'api-key' => $shipsyApiKey,
+                        'Content-Type' => 'application/json'
+                    ])->post($shipsyApiUrl, $shipsyPayload);
+
+                    // Step 4: (Optional but Recommended) Log the outcome from Shipsy.
+                    if ($response->successful()) {
+                        Log::info('Successfully sent order ' . $order->code . ' to Shipsy.', ['response' => $response->json()]);
+                    } else {
+                        // Log a detailed error if the API call fails for any reason.
+                        Log::error('Failed to send order ' . $order->code . ' to Shipsy.', [
+                            'status' => $response->status(),
+                            'response' => $response->body()
+                        ]);
+                    }
+                } else {
+                    Log::warning('Shipsy API key is not configured. Skipping API call for order ' . $order->code);
+                }
+
+            } catch (Throwable $e) {
+                // Catch any exception during the API call and log it.
+                // This prevents the entire order process from failing if Shipsy is down.
+                Log::error('An exception occurred while trying to send order ' . $order->code . ' to Shipsy.', [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
+            // =================================================================
+            // END: SHipsy Soft Data Upload Integration
+            // =================================================================
+
 
             return response()->json([
                 'message'          => 'Order created successfully',
