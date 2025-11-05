@@ -29,123 +29,90 @@ use Botble\Ecommerce\Models\MobileVerification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Botble\Ecommerce\Models\Currency;
+use Illuminate\Support\Arr;
 use Throwable;
 
 class OrderController extends Controller
 {
     private function prepareShipsyPayload(Order $order, array $products, $customer, OrderAddress $orderAddress, string $paymentMethod): array
     {
+        $totalQuantity = 0;
+        $totalWeight = 0.0;
+        $piecesDetail = [];
+
+        foreach ($products as $product) {
+            // Use the quantity from the order, not the product's total stock.
+            $quantityInOrder = $product->qty;
+            $totalQuantity += $quantityInOrder;
+
+            // Ensure weight is numeric and calculate total. Default to a small weight if not set.
+            $productWeight = is_numeric($product->weight) && $product->weight > 0 ? $product->weight : 0.5; // Default to 0.5 kg
+            $totalWeight += $productWeight * $quantityInOrder;
+
+            // The sale price of a single unit after discounts.
+            $unitPrice = Arr::get($product->options, 'original_price', $product->price);
+            if (Arr::get($product->options, 'sale_price')) {
+                $unitPrice = Arr::get($product->options, 'sale_price');
+            }
+
+            $piecesDetail[] = [
+                "description"        => $product->name,
+                "declared_value"     => (string) number_format($unitPrice, 2, '.', ''),
+                "weight"             => (string) $productWeight,
+                // NOTE: Add product dimensions to your database for accurate data. Using defaults for now.
+                "height"             => (string) (is_numeric($product->height) && $product->height > 0 ? $product->height : 10), // Default to 10cm
+                "length"             => (string) (is_numeric($product->length) && $product->length > 0 ? $product->length : 10), // Default to 10cm
+                "width"              => (string) (is_numeric($product->wide) && $product->wide > 0 ? $product->wide : 10), // Default to 10cm
+                "piece_product_code" => $product->sku ?? (string)$product->id,
+                "product_code"       => $product->sku ?? (string)$product->id,
+            ];
+        }
+        $originDetails = [
+            "name"           => 'Ahmed Al Maghribi Perfumes',
+            "phone"          => '+965 6690 3786',
+            "address_line_1" => 'Unit No. 07, Sama Makk Plot 83, Al Aqila, Block 5, Kuwait',
+            "pincode"        => '00000',
+            "city"           => 'Kuwait',
+            "state"          => 'Kuwait',
+            "country"        => 'Kuwait'
+        ];
+
         $payload = [
-            "action_type" => "delivery",
             "consignment_type" => "forward",
             "movement_type" => "forward",
             "load_type" => "NON-DOCUMENT",
-            "description" => "Order #10009470 containing 5 perfume products.",
+            "description" => "Order " . $order->code . " containing " . count($products) . " items.",
             "customer_code" => "",
             "reference_number" => "",
             "service_type_id" => "PREMIUM",
-            "hub_code" => "BOOKINGHUB",
-            "cod_amount" => "688.00",
-            "invoice_amount" => "675.00",
-            "invoice_number" => "10009470",
-            "invoice_date" => "2025-10-02",
-            "declared_value" => 675,
-            "num_pieces" => 5,
-            "customer_reference_number" => "",
-            "cod_favor_of" => "Your Company Name",
+            "cod_amount"        => ($paymentMethod === 'cod') ? (string)number_format($order->amount, 2, '.', '') : "0.00",
+            "invoice_amount"    => (string)number_format($order->sub_total, 2, '.', ''),
+            "invoice_number"    => str_replace('#', '', $order->code),
+            "invoice_date"      => $order->created_at->format('Y-m-d'),
+            "declared_value"    => (float)number_format($order->sub_total, 2, '.', ''),
+            "num_pieces"        => $totalQuantity,
+            "customer_reference_number" => $order->code,
+            "cod_favor_of"      => config('app.name', 'Ahmed Al Maghribi'),
             "cod_collection_mode" => "cash",
             "dimension_unit" => "cm",
             "length" => "30",
             "width" => "20",
             "height" => "15",
             "weight_unit" => "kg",
-            "weight" => "2.5",
-            "origin_details" => [
-                "name" => "Your Warehouse Name",
-                "phone" => "YOUR_WAREHOUSE_PHONE",
-                "address_line_1" => "Street 123, Industrial Area",
-                "pincode" => "00000",
-                "city" => "Ajman",
-                "state" => "Ajman",
-                "country" => "United Arab Emirates"
-            ],
+            "weight"            => (string) ($totalWeight > 0 ? $totalWeight : 0.1),
+            "origin_details"    => $originDetails,
             "destination_details" => [
-                "name" => "سشخخيي لاشقث Test",
-                "phone" => "0569177683",
-                "alternate_phone" => "",
-                "address_line_1" => "لاشؤ",
-                "address_line_2" => "ببب",
-                "pincode" => "00000",
-                "city" => "Ajman",
-                "state" => "Ajman",
-                "country" => "United Arab Emirates"
+                "name"           => $orderAddress->name,
+                "phone"          => $orderAddress->phone,
+                "alternate_phone"=> "",
+                "address_line_1" => $orderAddress->address,
+                "pincode"        => "00000",
+                "city"           => $orderAddress->city,
+                "state"          => $orderAddress->state,
+                "country"        => $orderAddress->country,
             ],
-            "return_details" => [
-                "name" => "Your Warehouse Name",
-                "phone" => "YOUR_WAREHOUSE_PHONE",
-                "address_line_1" => "Street 123, Industrial Area",
-                "pincode" => "00000",
-                "city" => "Ajman",
-                "state" => "Ajman",
-                "country" => "United Arab Emirates"
-            ],
-            "nodes" => [
-                [
-                    "courier_partner" => "BLUEDART",
-                    "courier_accounts" => "Bluedart_ggn_mum",
-                    "declared_value" => "675",
-                    "mode" => "shipment",
-                    "node_type" => "FM"
-                ]
-            ],
-            "pieces_detail" => [
-                [
-                    "description" => "Marj",
-                    "declared_value" => "165.00",
-                    "weight" => "0.5",
-                    "height" => "12",
-                    "length" => "8",
-                    "width" => "8",
-                    "piece_product_code" => "49",
-                    "product_code" => "49"
-                ],
-                [
-                    "description" => "Bidun Esam",
-                    "declared_value" => "60.00",
-                    "weight" => "0.5",
-                    "height" => "12",
-                    "length" => "8",
-                    "width" => "8",
-                    "piece_product_code" => "32"
-                ],
-                [
-                    "description" => "Bin Shaikh",
-                    "declared_value" => "215.00",
-                    "weight" => "0.5",
-                    "height" => "12",
-                    "length" => "8",
-                    "width" => "8",
-                    "piece_product_code" => "34"
-                ],
-                [
-                    "description" => "Laathani",
-                    "declared_value" => "175.00",
-                    "weight" => "0.5",
-                    "height" => "12",
-                    "length" => "8",
-                    "width" => "8",
-                    "piece_product_code" => "45"
-                ],
-                [
-                    "description" => "Oud AMG",
-                    "declared_value" => "60.00",
-                    "weight" => "0.5",
-                    "height" => "12",
-                    "length" => "8",
-                    "width" => "8",
-                    "piece_product_code" => "54"
-                ]
-            ]
+            "return_details"    => $originDetails,
+            "pieces_detail" => $piecesDetail
         ];
 
         return $payload;
@@ -903,6 +870,7 @@ class OrderController extends Controller
                 if ($shipsyApiKey) {
                     // Step 2: Prepare the payload using our helper function.
                     $shipsyPayload = $this->prepareShipsyPayload($order, $prod, $loggedInCustomer, $finalOrderAddress, $request->input('payment_method'));
+                    
                     Log::info('Preparing to send payload to Shipsy for order ' . $order->code, ['payload' => $shipsyPayload]);
 
                     // Step 3: Make the API call to Shipsy.
