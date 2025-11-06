@@ -70,7 +70,7 @@ class OrderController extends Controller
         $originDetails = [
             "name"           => 'Ahmed Al Maghribi Perfumes',
             "phone"          => '+965 6690 3786',
-            "address_line_1" => 'Unit No. 07, Sama Makk Plot 83, Al Aqila, Block 5, Kuwait',
+            "address_line_1" => 'Unit No. 07, Sama Mall Plot 83, Al Aqila, Block 5, Kuwait',
             "pincode"        => '00000',
             "city"           => 'Kuwait',
             "state"          => 'Kuwait',
@@ -92,7 +92,7 @@ class OrderController extends Controller
             "declared_value"    => (float)number_format($order->sub_total, 2, '.', ''),
             "num_pieces"        => $totalQuantity,
             "customer_reference_number" => $order->code,
-            "cod_favor_of"      => config('app.name', 'Ahmed Al Maghribi'),
+            "cod_favor_of"      => 'Ahmed Al Maghribi',
             "cod_collection_mode" => "cash",
             "dimension_unit" => "cm",
             "length" => "30",
@@ -865,7 +865,7 @@ class OrderController extends Controller
             try {
                 // Step 1: Get the Shipsy API Key from your environment variables.
                 // It's crucial to store secrets like API keys in your .env file, not in the code.
-                $shipsyApiKey = config('services.shipsy.api_key');
+                $shipsyApiKey = env('SHIPSY_API_KEY');
                 
                 if ($shipsyApiKey) {
                     // Step 2: Prepare the payload using our helper function.
@@ -937,7 +937,7 @@ class OrderController extends Controller
                 ]
             ],
             "merchant" => [
-                "id" => config('payment.tap_merchant_id'),
+                "id" => env('TAP_MERCHANT_ID'),
                 // "id" => "19407760"
             ],
             "source" => [
@@ -948,10 +948,10 @@ class OrderController extends Controller
             ],
         ];
 
-        $SERVER_KEY = config('payment.tap_secret_key');
+        $SERVER_KEY = env('TAP_SERVER_KEY');
         // $SERVER_KEY = 'sk_test_gBXF25QfuDiU1VEMao6bP4HA';
         // $SERVER_KEY = 'sk_live_DVoHY2FQcIgXjElnyuSCTPm3';
-        $BASE_URL = config('payment.tap_base_url');
+        $BASE_URL = env('TAP_BASE_URL');
         // $BASE_URL = 'https://api.tap.company/v2/charges';
 
         // $data['profile_id'] = $PROFILE_ID;
@@ -984,9 +984,9 @@ class OrderController extends Controller
         // $order = Order::where('user_id', $customer->id)->orderBy('id', 'desc')->first();
         $order = Order::where('code', base64_decode($request->query('order_number')))->orderBy('id', 'desc')->first();
         // echo "<pre>";print_r($order);
-        $BASE_URL = config('payment.tap_redirect_url');
+        $BASE_URL = env('TAP_BASE_URL').'/';
         // $BASE_URL = 'https://api.tap.company/v2/charges/';
-        $SERVER_KEY = config('payment.tap_secret_key');
+        $SERVER_KEY = env('TAP_SERVER_KEY');
         // $SERVER_KEY = 'sk_test_gBXF25QfuDiU1VEMao6bP4HA';
         // $SERVER_KEY = 'sk_live_DVoHY2FQcIgXjElnyuSCTPm3';
 
