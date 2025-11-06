@@ -81,7 +81,7 @@ class OrderController extends Controller
             "consignment_type" => "forward",
             "movement_type" => "forward",
             "load_type" => "NON-DOCUMENT",
-            "description" => "Order " . $order->code . " containing " . count($products) . " items.",
+            "description" => implode(" / ", array_map(fn($p) => $p->name . " x" . $p->qty, $products)),
             "customer_code" => "",
             "reference_number" => "",
             "service_type_id" => "PREMIUM",
