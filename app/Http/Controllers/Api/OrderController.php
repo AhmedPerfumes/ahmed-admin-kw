@@ -34,89 +34,89 @@ use Throwable;
 
 class OrderController extends Controller
 {
-    private function prepareShipsyPayload(Order $order, array $products, $customer, OrderAddress $orderAddress, string $paymentMethod): array
-    {
-        $totalQuantity = 0;
-        $totalWeight = 0.0;
-        $piecesDetail = [];
+    // private function prepareShipsyPayload(Order $order, array $products, $customer, OrderAddress $orderAddress, string $paymentMethod): array
+    // {
+    //     $totalQuantity = 0;
+    //     $totalWeight = 0.0;
+    //     $piecesDetail = [];
 
-        foreach ($products as $product) {
-            // Use the quantity from the order, not the product's total stock.
-            $quantityInOrder = $product->qty;
-            $totalQuantity += $quantityInOrder;
+    //     foreach ($products as $product) {
+    //         // Use the quantity from the order, not the product's total stock.
+    //         $quantityInOrder = $product->qty;
+    //         $totalQuantity += $quantityInOrder;
 
-            // Ensure weight is numeric and calculate total. Default to a small weight if not set.
-            $productWeight = is_numeric($product->weight) && $product->weight > 0 ? $product->weight : 0.5; // Default to 0.5 kg
-            $totalWeight += $productWeight * $quantityInOrder;
+    //         // Ensure weight is numeric and calculate total. Default to a small weight if not set.
+    //         $productWeight = is_numeric($product->weight) && $product->weight > 0 ? $product->weight : 0.5; // Default to 0.5 kg
+    //         $totalWeight += $productWeight * $quantityInOrder;
 
-            // The sale price of a single unit after discounts.
-            $unitPrice = Arr::get($product->options, 'original_price', $product->price);
-            if (Arr::get($product->options, 'sale_price')) {
-                $unitPrice = Arr::get($product->options, 'sale_price');
-            }
+    //         // The sale price of a single unit after discounts.
+    //         $unitPrice = Arr::get($product->options, 'original_price', $product->price);
+    //         if (Arr::get($product->options, 'sale_price')) {
+    //             $unitPrice = Arr::get($product->options, 'sale_price');
+    //         }
 
-            $piecesDetail[] = [
-                "description"        => $product->name,
-                "declared_value"     => (string) number_format($unitPrice, 2, '.', ''),
-                "weight"             => (string) $productWeight,
-                // NOTE: Add product dimensions to your database for accurate data. Using defaults for now.
-                "height"             => (string) (is_numeric($product->height) && $product->height > 0 ? $product->height : 10), // Default to 10cm
-                "length"             => (string) (is_numeric($product->length) && $product->length > 0 ? $product->length : 10), // Default to 10cm
-                "width"              => (string) (is_numeric($product->wide) && $product->wide > 0 ? $product->wide : 10), // Default to 10cm
-                "piece_product_code" => $product->sku ?? (string)$product->id,
-                "product_code"       => $product->sku ?? (string)$product->id,
-            ];
-        }
-        $originDetails = [
-            "name"           => 'Ahmed Al Maghribi Perfumes',
-            "phone"          => '+965 6690 3786',
-            "address_line_1" => 'Unit No. 07, Sama Mall Plot 83, Al Aqila, Block 5, Kuwait',
-            "pincode"        => '00000',
-            "city"           => 'Kuwait',
-            "state"          => 'Kuwait',
-            "country"        => 'Kuwait'
-        ];
+    //         $piecesDetail[] = [
+    //             "description"        => $product->name,
+    //             "declared_value"     => (string) number_format($unitPrice, 2, '.', ''),
+    //             "weight"             => (string) $productWeight,
+    //             // NOTE: Add product dimensions to your database for accurate data. Using defaults for now.
+    //             "height"             => (string) (is_numeric($product->height) && $product->height > 0 ? $product->height : 10), // Default to 10cm
+    //             "length"             => (string) (is_numeric($product->length) && $product->length > 0 ? $product->length : 10), // Default to 10cm
+    //             "width"              => (string) (is_numeric($product->wide) && $product->wide > 0 ? $product->wide : 10), // Default to 10cm
+    //             "piece_product_code" => $product->sku ?? (string)$product->id,
+    //             "product_code"       => $product->sku ?? (string)$product->id,
+    //         ];
+    //     }
+    //     $originDetails = [
+    //         "name"           => 'Ahmed Al Maghribi Perfumes',
+    //         "phone"          => '+965 6690 3786',
+    //         "address_line_1" => 'Unit No. 07, Sama Mall Plot 83, Al Aqila, Block 5, Kuwait',
+    //         "pincode"        => '00000',
+    //         "city"           => 'Kuwait',
+    //         "state"          => 'Kuwait',
+    //         "country"        => 'Kuwait'
+    //     ];
 
-        $payload = [
-            "consignment_type" => "forward",
-            "movement_type" => "forward",
-            "load_type" => "NON-DOCUMENT",
-            "description" => implode(" / ", array_map(fn($p) => $p->name . " x" . $p->qty, $products)),
-            "customer_code" => "",
-            "reference_number" => "",
-            "service_type_id" => "PREMIUM",
-            "cod_amount"        => ($paymentMethod === 'cod') ? (string)number_format($order->amount, 2, '.', '') : "0.00",
-            "invoice_amount"    => (string)number_format($order->sub_total, 2, '.', ''),
-            "invoice_number"    => str_replace('#', '', $order->code),
-            "invoice_date"      => $order->created_at->format('Y-m-d'),
-            "declared_value"    => (float)number_format($order->sub_total, 2, '.', ''),
-            "num_pieces"        => $totalQuantity,
-            "customer_reference_number" => $order->code,
-            "cod_favor_of"      => 'Ahmed Al Maghribi',
-            "cod_collection_mode" => "cash",
-            "dimension_unit" => "cm",
-            "length" => "30",
-            "width" => "20",
-            "height" => "15",
-            "weight_unit" => "kg",
-            "weight"            => (string) ($totalWeight > 0 ? $totalWeight : 0.1),
-            "origin_details"    => $originDetails,
-            "destination_details" => [
-                "name"           => $orderAddress->name,
-                "phone"          => $orderAddress->phone,
-                "alternate_phone"=> "",
-                "address_line_1" => $orderAddress->address,
-                "pincode"        => "00000",
-                "city"           => $orderAddress->city,
-                "state"          => $orderAddress->state,
-                "country"        => $orderAddress->country,
-            ],
-            "return_details"    => $originDetails,
-            "pieces_detail" => $piecesDetail
-        ];
+    //     $payload = [
+    //         "consignment_type" => "forward",
+    //         "movement_type" => "forward",
+    //         "load_type" => "NON-DOCUMENT",
+    //         "description" => implode(" / ", array_map(fn($p) => $p->name . " x" . $p->qty, $products)),
+    //         "customer_code" => "",
+    //         "reference_number" => "",
+    //         "service_type_id" => "PREMIUM",
+    //         "cod_amount"        => ($paymentMethod === 'cod') ? (string)number_format($order->amount, 2, '.', '') : "0.00",
+    //         "invoice_amount"    => (string)number_format($order->sub_total, 2, '.', ''),
+    //         "invoice_number"    => str_replace('#', '', $order->code),
+    //         "invoice_date"      => $order->created_at->format('Y-m-d'),
+    //         "declared_value"    => (float)number_format($order->sub_total, 2, '.', ''),
+    //         "num_pieces"        => $totalQuantity,
+    //         "customer_reference_number" => $order->code,
+    //         "cod_favor_of"      => 'Ahmed Al Maghribi',
+    //         "cod_collection_mode" => "cash",
+    //         "dimension_unit" => "cm",
+    //         "length" => "30",
+    //         "width" => "20",
+    //         "height" => "15",
+    //         "weight_unit" => "kg",
+    //         "weight"            => (string) ($totalWeight > 0 ? $totalWeight : 0.1),
+    //         "origin_details"    => $originDetails,
+    //         "destination_details" => [
+    //             "name"           => $orderAddress->name,
+    //             "phone"          => $orderAddress->phone,
+    //             "alternate_phone"=> "",
+    //             "address_line_1" => $orderAddress->address,
+    //             "pincode"        => "00000",
+    //             "city"           => $orderAddress->city,
+    //             "state"          => $orderAddress->state,
+    //             "country"        => $orderAddress->country,
+    //         ],
+    //         "return_details"    => $originDetails,
+    //         "pieces_detail" => $piecesDetail
+    //     ];
 
-        return $payload;
-    }
+    //     return $payload;
+    // }
     public function storeOrder(Request $request, CreatePaymentForOrderService $createPaymentForOrderService) {
 
         $validator = Validator::make($request->all(), [
@@ -859,53 +859,53 @@ class OrderController extends Controller
             );
 
             
-            // =================================================================
-            // START: SHipsy Soft Data Upload Integration
-            // =================================================================
-            try {
-                // Step 1: Get the Shipsy API Key from your environment variables.
-                // It's crucial to store secrets like API keys in your .env file, not in the code.
-                $shipsyApiKey = env('SHIPSY_API_KEY');
+            // // =================================================================
+            // // START: SHipsy Soft Data Upload Integration
+            // // =================================================================
+            // try {
+            //     // Step 1: Get the Shipsy API Key from your environment variables.
+            //     // It's crucial to store secrets like API keys in your .env file, not in the code.
+            //     $shipsyApiKey = env('SHIPSY_API_KEY');
                 
-                if ($shipsyApiKey) {
-                    // Step 2: Prepare the payload using our helper function.
-                    $shipsyPayload = $this->prepareShipsyPayload($order, $prod, $loggedInCustomer, $finalOrderAddress, $request->input('payment_method'));
+            //     if ($shipsyApiKey) {
+            //         // Step 2: Prepare the payload using our helper function.
+            //         $shipsyPayload = $this->prepareShipsyPayload($order, $prod, $loggedInCustomer, $finalOrderAddress, $request->input('payment_method'));
                     
-                    Log::info('Preparing to send payload to Shipsy for order ' . $order->code, ['payload' => $shipsyPayload]);
+            //         Log::info('Preparing to send payload to Shipsy for order ' . $order->code, ['payload' => $shipsyPayload]);
 
-                    // Step 3: Make the API call to Shipsy.
-                    $shipsyApiUrl = "https://app.shipsy.in/api/customer/integration/consignment/upload/softdata/v2";
+            //         // Step 3: Make the API call to Shipsy.
+            //         $shipsyApiUrl = "https://app.shipsy.in/api/customer/integration/consignment/upload/softdata/v2";
                     
-                    $response = Http::withHeaders([
-                        'api-key' => $shipsyApiKey,
-                        'Content-Type' => 'application/json'
-                    ])->post($shipsyApiUrl, $shipsyPayload);
+            //         $response = Http::withHeaders([
+            //             'api-key' => $shipsyApiKey,
+            //             'Content-Type' => 'application/json'
+            //         ])->post($shipsyApiUrl, $shipsyPayload);
 
-                    // Step 4: (Optional but Recommended) Log the outcome from Shipsy.
-                    if ($response->successful()) {
-                        Log::info('Successfully sent order ' . $order->code . ' to Shipsy.', ['response' => $response->json()]);
-                    } else {
-                        // Log a detailed error if the API call fails for any reason.
-                        Log::error('Failed to send order ' . $order->code . ' to Shipsy.', [
-                            'status' => $response->status(),
-                            'response' => $response->body()
-                        ]);
-                    }
-                } else {
-                    Log::warning('Shipsy API key is not configured. Skipping API call for order ' . $order->code);
-                }
+            //         // Step 4: (Optional but Recommended) Log the outcome from Shipsy.
+            //         if ($response->successful()) {
+            //             Log::info('Successfully sent order ' . $order->code . ' to Shipsy.', ['response' => $response->json()]);
+            //         } else {
+            //             // Log a detailed error if the API call fails for any reason.
+            //             Log::error('Failed to send order ' . $order->code . ' to Shipsy.', [
+            //                 'status' => $response->status(),
+            //                 'response' => $response->body()
+            //             ]);
+            //         }
+            //     } else {
+            //         Log::warning('Shipsy API key is not configured. Skipping API call for order ' . $order->code);
+            //     }
 
-            } catch (Throwable $e) {
-                // Catch any exception during the API call and log it.
-                // This prevents the entire order process from failing if Shipsy is down.
-                Log::error('An exception occurred while trying to send order ' . $order->code . ' to Shipsy.', [
-                    'message' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
-                ]);
-            }
-            // =================================================================
-            // END: SHipsy Soft Data Upload Integration
-            // =================================================================
+            // } catch (Throwable $e) {
+            //     // Catch any exception during the API call and log it.
+            //     // This prevents the entire order process from failing if Shipsy is down.
+            //     Log::error('An exception occurred while trying to send order ' . $order->code . ' to Shipsy.', [
+            //         'message' => $e->getMessage(),
+            //         'trace' => $e->getTraceAsString(),
+            //     ]);
+            // }
+            // // =================================================================
+            // // END: SHipsy Soft Data Upload Integration
+            // // =================================================================
 
 
             return response()->json([
@@ -1020,39 +1020,38 @@ class OrderController extends Controller
             $request->input('tap_id'),
             isset($response['response']['message']) ? $response['response']['message'] : $response['status'],
         );
-            try {
-                $shipsyApiKey = env('SHIPSY_API_KEY');
-                
-                if ($shipsyApiKey) {
-                    $shipsyPayload = $this->prepareShipsyPayload($order, $prod, $loggedInCustomer, $finalOrderAddress, $request->input('payment_method'));
-                    
-                    Log::info('Preparing to send payload to Shipsy for order ' . $order->code, ['payload' => $shipsyPayload]);
 
-                    $shipsyApiUrl = "https://app.shipsy.in/api/customer/integration/consignment/upload/softdata/v2";
-                    
-                    $response = Http::withHeaders([
-                        'api-key' => $shipsyApiKey,
-                        'Content-Type' => 'application/json'
-                    ])->post($shipsyApiUrl, $shipsyPayload);
-
-                    if ($response->successful()) {
-                        Log::info('Successfully sent order ' . $order->code . ' to Shipsy.', ['response' => $response->json()]);
-                    } else {
-                        Log::error('Failed to send order ' . $order->code . ' to Shipsy.', [
-                            'status' => $response->status(),
-                            'response' => $response->body()
-                        ]);
-                    }
-                } else {
-                    Log::warning('Shipsy API key is not configured. Skipping API call for order ' . $order->code);
-                }
-
-            } catch (Throwable $e) {
-                Log::error('An exception occurred while trying to send order ' . $order->code . ' to Shipsy.', [
-                    'message' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
-                ]);
-            }
+        // $paymentStatus = $response['status'];
+        // $paymentStat = $paymentStatus == 'CAPTURED' ? 'completed' : 'failed';
+        // if($paymentStat == 'completed') {
+        //     try {
+        //         $shipsyApiKey = env('SHIPSY_API_KEY');
+        //         if ($shipsyApiKey) {
+        //             $shipsyPayload = $this->prepareShipsyPayload($order, $prod, $loggedInCustomer, $finalOrderAddress, $request->input('payment_method'));
+        //             Log::info('Preparing to send payload to Shipsy for order ' . $order->code, ['payload' => $shipsyPayload]);
+        //             $shipsyApiUrl = "https://app.shipsy.in/api/customer/integration/consignment/upload/softdata/v2";  
+        //             $response = Http::withHeaders([
+        //                 'api-key' => $shipsyApiKey,
+        //                 'Content-Type' => 'application/json'
+        //             ])->post($shipsyApiUrl, $shipsyPayload);
+        //             if ($response->successful()) {
+        //                 Log::info('Successfully sent order ' . $order->code . ' to Shipsy.', ['response' => $response->json()]);
+        //             } else {
+        //                 Log::error('Failed to send order ' . $order->code . ' to Shipsy.', [
+        //                     'status' => $response->status(),
+        //                     'response' => $response->body()
+        //                 ]);
+        //             }
+        //         } else {
+        //             Log::warning('Shipsy API key is not configured. Skipping API call for order ' . $order->code);
+        //         }
+        //     } catch (Throwable $e) {
+        //         Log::error('An exception occurred while trying to send order ' . $order->code . ' to Shipsy.', [
+        //             'message' => $e->getMessage(),
+        //             'trace' => $e->getTraceAsString(),
+        //         ]);
+        //     }
+        // }
 
         header('Location: http://localhost:3000/'.$order->lang.'/shop-order-payment-complete?q='.base64_encode($order->code));exit();
     }
