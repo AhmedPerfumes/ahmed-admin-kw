@@ -1020,6 +1020,39 @@ class OrderController extends Controller
             $request->input('tap_id'),
             isset($response['response']['message']) ? $response['response']['message'] : $response['status'],
         );
+            try {
+                $shipsyApiKey = env('SHIPSY_API_KEY');
+                
+                if ($shipsyApiKey) {
+                    $shipsyPayload = $this->prepareShipsyPayload($order, $prod, $loggedInCustomer, $finalOrderAddress, $request->input('payment_method'));
+                    
+                    Log::info('Preparing to send payload to Shipsy for order ' . $order->code, ['payload' => $shipsyPayload]);
+
+                    $shipsyApiUrl = "https://app.shipsy.in/api/customer/integration/consignment/upload/softdata/v2";
+                    
+                    $response = Http::withHeaders([
+                        'api-key' => $shipsyApiKey,
+                        'Content-Type' => 'application/json'
+                    ])->post($shipsyApiUrl, $shipsyPayload);
+
+                    if ($response->successful()) {
+                        Log::info('Successfully sent order ' . $order->code . ' to Shipsy.', ['response' => $response->json()]);
+                    } else {
+                        Log::error('Failed to send order ' . $order->code . ' to Shipsy.', [
+                            'status' => $response->status(),
+                            'response' => $response->body()
+                        ]);
+                    }
+                } else {
+                    Log::warning('Shipsy API key is not configured. Skipping API call for order ' . $order->code);
+                }
+
+            } catch (Throwable $e) {
+                Log::error('An exception occurred while trying to send order ' . $order->code . ' to Shipsy.', [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
 
         header('Location: http://localhost:3000/'.$order->lang.'/shop-order-payment-complete?q='.base64_encode($order->code));exit();
     }
