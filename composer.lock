@@ -159,7 +159,6 @@
         },
         {
             "name": "bacon/bacon-qr-code",
-<<<<<<< Updated upstream
             "version": "v3.0.1",
             "source": {
                 "type": "git",
@@ -170,18 +169,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/f9cc1f52b5a463062251d666761178dbdb6b544f",
                 "reference": "f9cc1f52b5a463062251d666761178dbdb6b544f",
-=======
-            "version": "v3.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Bacon/BaconQrCode.git",
-                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
-                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
->>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -509,11 +496,7 @@
         },
         {
             "name": "botble/get-started",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/get-started",
@@ -539,11 +522,7 @@
         },
         {
             "name": "botble/installer",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/installer",
@@ -572,11 +551,7 @@
         },
         {
             "name": "botble/menu",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/menu",
@@ -609,11 +584,7 @@
         },
         {
             "name": "botble/optimize",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/optimize",
@@ -645,11 +616,7 @@
         },
         {
             "name": "botble/page",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/page",
@@ -679,11 +646,7 @@
         },
         {
             "name": "botble/platform",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/core",
@@ -789,11 +752,7 @@
         },
         {
             "name": "botble/plugin-management",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/plugin-management",
@@ -822,11 +781,7 @@
         },
         {
             "name": "botble/revision",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/revision",
@@ -855,11 +810,7 @@
         },
         {
             "name": "botble/seo-helper",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/seo-helper",
@@ -892,11 +843,7 @@
         },
         {
             "name": "botble/shortcode",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/shortcode",
@@ -928,11 +875,7 @@
         },
         {
             "name": "botble/sitemap",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/sitemap",
@@ -961,11 +904,7 @@
         },
         {
             "name": "botble/slug",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/slug",
@@ -997,11 +936,7 @@
         },
         {
             "name": "botble/theme",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/theme",
@@ -1042,11 +977,7 @@
         },
         {
             "name": "botble/widget",
-<<<<<<< Updated upstream
             "version": "dev-dev",
-=======
-            "version": "dev-master",
->>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/widget",
