@@ -1252,10 +1252,10 @@ elseif(!empty($product['coupon']) && !is_null($exisProduct->coupon) && !empty($e
                     'sale_price' => $item['sale_price'],
                 ];
 
-                // Add only if exists
-                // if (isset($item['is_gift'])) {
-                //     $product['is_gift'] = $item['is_gift'];
-                // }
+            
+                if (isset($item['is_gift'])) {
+                    $product['is_gift'] = $item['is_gift'];
+                }
 
                 return $product;
 
