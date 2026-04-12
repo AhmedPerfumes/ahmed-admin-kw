@@ -159,12 +159,8 @@
         },
         {
             "name": "bacon/bacon-qr-code",
-<<<<<<< HEAD
 <<<<<<< Updated upstream
             "version": "v3.0.1",
-=======
-            "version": "v3.0.3",
->>>>>>> dev
             "source": {
                 "type": "git",
                 "url": "https://github.com/Bacon/BaconQrCode.git",
@@ -172,7 +168,6 @@
             },
             "dist": {
                 "type": "zip",
-<<<<<<< HEAD
                 "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/f9cc1f52b5a463062251d666761178dbdb6b544f",
                 "reference": "f9cc1f52b5a463062251d666761178dbdb6b544f",
 =======
@@ -187,10 +182,6 @@
                 "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
                 "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
 >>>>>>> Stashed changes
-=======
-                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/36a1cb2b81493fa5b82e50bf8068bf84d1542563",
-                "reference": "36a1cb2b81493fa5b82e50bf8068bf84d1542563",
->>>>>>> dev
                 "shasum": ""
             },
             "require": {
@@ -230,21 +221,9 @@
             "homepage": "https://github.com/Bacon/BaconQrCode",
             "support": {
                 "issues": "https://github.com/Bacon/BaconQrCode/issues",
-<<<<<<< HEAD
-<<<<<<< Updated upstream
                 "source": "https://github.com/Bacon/BaconQrCode/tree/v3.0.1"
             },
             "time": "2024-10-01T13:55:55+00:00"
-=======
-                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.1.1"
-            },
-            "time": "2026-04-05T21:06:35+00:00"
->>>>>>> Stashed changes
-=======
-                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.0.3"
-            },
-            "time": "2025-11-19T17:15:36+00:00"
->>>>>>> dev
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -4060,12 +4039,7 @@
         },
         {
             "name": "laravel/socialite",
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "version": "v5.21.0",
-=======
-            "version": "v5.24.2",
->>>>>>> dev
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
@@ -4073,25 +4047,8 @@
             },
             "dist": {
                 "type": "zip",
-<<<<<<< HEAD
                 "url": "https://api.github.com/repos/laravel/socialite/zipball/d83639499ad14985c9a6a9713b70073300ce998d",
                 "reference": "d83639499ad14985c9a6a9713b70073300ce998d",
-=======
-            "version": "v5.16.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravel/socialite.git",
-                "reference": "40a2dc98c53d9dc6d55eadb0d490d3d72b73f1bf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravel/socialite/zipball/40a2dc98c53d9dc6d55eadb0d490d3d72b73f1bf",
-                "reference": "40a2dc98c53d9dc6d55eadb0d490d3d72b73f1bf",
->>>>>>> Stashed changes
-=======
-                "url": "https://api.github.com/repos/laravel/socialite/zipball/5cea2eebf11ca4bc6c2f20495c82a70a9b3d1613",
-                "reference": "5cea2eebf11ca4bc6c2f20495c82a70a9b3d1613",
->>>>>>> dev
                 "shasum": ""
             },
             "require": {
@@ -4150,15 +4107,7 @@
                 "issues": "https://github.com/laravel/socialite/issues",
                 "source": "https://github.com/laravel/socialite"
             },
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "time": "2025-05-19T12:56:37+00:00"
-=======
-            "time": "2024-09-03T09:46:57+00:00"
->>>>>>> Stashed changes
-=======
-            "time": "2026-01-10T16:07:28+00:00"
->>>>>>> dev
         },
         {
             "name": "laravel/tinker",
@@ -7442,12 +7391,7 @@
         },
         {
             "name": "razorpay/razorpay",
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "version": "2.9.1",
-=======
-            "version": "2.9.2",
->>>>>>> dev
             "source": {
                 "type": "git",
                 "url": "https://github.com/razorpay/razorpay-php.git",
@@ -7455,25 +7399,8 @@
             },
             "dist": {
                 "type": "zip",
-<<<<<<< HEAD
                 "url": "https://api.github.com/repos/razorpay/razorpay-php/zipball/d5e49ef12c4862f6bc8003f87f79b942a9dd3a8b",
                 "reference": "d5e49ef12c4862f6bc8003f87f79b942a9dd3a8b",
-=======
-            "version": "2.9.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/razorpay/razorpay-php.git",
-                "reference": "c5cf59941eb2d888e80371328d932e6e8266d352"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/razorpay/razorpay-php/zipball/c5cf59941eb2d888e80371328d932e6e8266d352",
-                "reference": "c5cf59941eb2d888e80371328d932e6e8266d352",
->>>>>>> Stashed changes
-=======
-                "url": "https://api.github.com/repos/razorpay/razorpay-php/zipball/c5cf59941eb2d888e80371328d932e6e8266d352",
-                "reference": "c5cf59941eb2d888e80371328d932e6e8266d352",
->>>>>>> dev
                 "shasum": ""
             },
             "require": {
@@ -7525,15 +7452,7 @@
                 "issues": "https://github.com/Razorpay/razorpay-php/issues",
                 "source": "https://github.com/Razorpay/razorpay-php"
             },
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "time": "2025-03-20T12:51:47+00:00"
-=======
-            "time": "2025-08-05T07:13:20+00:00"
->>>>>>> Stashed changes
-=======
-            "time": "2025-08-05T07:13:20+00:00"
->>>>>>> dev
         },
         {
             "name": "rmccue/requests",
@@ -8028,12 +7947,7 @@
         },
         {
             "name": "symfony/cache",
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "version": "v6.4.23",
-=======
-            "version": "v6.4.32",
->>>>>>> dev
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
@@ -8041,25 +7955,8 @@
             },
             "dist": {
                 "type": "zip",
-<<<<<<< HEAD
                 "url": "https://api.github.com/repos/symfony/cache/zipball/c88690befb8d4a85dc321fb78d677507f5eb141b",
                 "reference": "c88690befb8d4a85dc321fb78d677507f5eb141b",
-=======
-            "version": "v6.4.36",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/cache.git",
-                "reference": "5b94fba945d1f9e7929cffd50e7a17f1ac36f10b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/5b94fba945d1f9e7929cffd50e7a17f1ac36f10b",
-                "reference": "5b94fba945d1f9e7929cffd50e7a17f1ac36f10b",
->>>>>>> Stashed changes
-=======
-                "url": "https://api.github.com/repos/symfony/cache/zipball/1b4c97d554c8c6d2c09546fcdef7f1aa338560a7",
-                "reference": "1b4c97d554c8c6d2c09546fcdef7f1aa338560a7",
->>>>>>> dev
                 "shasum": ""
             },
             "require": {
@@ -8126,15 +8023,7 @@
                 "psr6"
             ],
             "support": {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
                 "source": "https://github.com/symfony/cache/tree/v6.4.23"
-=======
-                "source": "https://github.com/symfony/cache/tree/v6.4.36"
->>>>>>> Stashed changes
-=======
-                "source": "https://github.com/symfony/cache/tree/v6.4.32"
->>>>>>> dev
             },
             "funding": [
                 {
@@ -8154,15 +8043,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "time": "2025-06-27T18:31:36+00:00"
-=======
-            "time": "2026-03-30T14:52:43+00:00"
->>>>>>> Stashed changes
-=======
-            "time": "2026-01-23T12:55:33+00:00"
->>>>>>> dev
         },
         {
             "name": "symfony/cache-contracts",
@@ -10712,12 +10593,7 @@
         },
         {
             "name": "symfony/var-exporter",
-<<<<<<< HEAD
-<<<<<<< Updated upstream
             "version": "v6.4.22",
-=======
-            "version": "v6.4.26",
->>>>>>> dev
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
@@ -10725,25 +10601,8 @@
             },
             "dist": {
                 "type": "zip",
-<<<<<<< HEAD
                 "url": "https://api.github.com/repos/symfony/var-exporter/zipball/f28cf841f5654955c9f88ceaf4b9dc29571988a9",
                 "reference": "f28cf841f5654955c9f88ceaf4b9dc29571988a9",
-=======
-            "version": "v6.4.36",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "f9c4a9695a9e2bbc65c920e147d8d7ae28f8d79a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/f9c4a9695a9e2bbc65c920e147d8d7ae28f8d79a",
-                "reference": "f9c4a9695a9e2bbc65c920e147d8d7ae28f8d79a",
->>>>>>> Stashed changes
-=======
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/466fcac5fa2e871f83d31173f80e9c2684743bfc",
-                "reference": "466fcac5fa2e871f83d31173f80e9c2684743bfc",
->>>>>>> dev
                 "shasum": ""
             },
             "require": {
@@ -10791,12 +10650,7 @@
                 "serialize"
             ],
             "support": {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
                 "source": "https://github.com/symfony/var-exporter/tree/v6.4.22"
-=======
-                "source": "https://github.com/symfony/var-exporter/tree/v6.4.36"
->>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -10816,94 +10670,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< Updated upstream
             "time": "2025-05-14T13:00:13+00:00"
-=======
-            "time": "2026-03-10T15:06:19+00:00"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v6.4.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "52903de178d542850f6f341ba92995d3d63e60c9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/52903de178d542850f6f341ba92995d3d63e60c9",
-                "reference": "52903de178d542850f6f341ba92995d3d63e60c9",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony/deprecation-contracts": "^2.5|^3",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "conflict": {
-                "symfony/console": "<5.4"
-            },
-            "require-dev": {
-                "symfony/console": "^5.4|^6.0|^7.0"
-            },
-            "bin": [
-                "Resources/bin/yaml-lint"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Loads and dumps YAML files",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/yaml/tree/v6.4.8"
-=======
-                "source": "https://github.com/symfony/var-exporter/tree/v6.4.26"
->>>>>>> dev
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-<<<<<<< HEAD
-            "time": "2024-05-31T14:49:08+00:00"
->>>>>>> Stashed changes
-=======
-            "time": "2025-09-11T09:57:09+00:00"
->>>>>>> dev
         },
         {
             "name": "tightenco/ziggy",
