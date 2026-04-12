@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\ContactController;
 |
 */ 
 // Auth Routes
-Route::middleware('customLogs')->group(function () {
+Route::middleware(['customLogs', 'restrict.domains'])->group(function () {
     Route::post('/signup', [AuthController::class, 'signup']);
 
     Route::post('/verifyOTP', [AuthController::class, 'verifyOTP']);
@@ -37,7 +37,10 @@ Route::middleware('customLogs')->group(function () {
 
     // Product Routes
     Route::withoutMiddleware('customLogs')->post('/products', [ProductController::class, 'getProducts']);
-
+    Route::post('/products/live-status', [ProductController::class, 'getProductsLiveStatus']);
+    Route::get('/bogoProducts', [ProductController::class, 'bogoProducts']);
+    Route::get('/freeGiftProducts', [ProductController::class, 'freeGiftProducts']);
+    
     // All Product Routes
     Route::withoutMiddleware('customLogs')->post('/allProducts', [ProductController::class, 'getAllProducts']);
     Route::withoutMiddleware('customLogs')->post('/exportProducts', [ProductController::class, 'getExportProducts']);

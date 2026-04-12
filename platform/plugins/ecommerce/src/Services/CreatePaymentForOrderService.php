@@ -16,6 +16,12 @@ use Botble\Ecommerce\Models\OrderAddress;
 use Botble\Ecommerce\Models\Address;
 use Botble\Ecommerce\Models\OrderProduct;
 use PHPMailer\PHPMailer\PHPMailer;
+use Throwable;
+use Botble\Ecommerce\Models\Product;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 
 class CreatePaymentForOrderService
 {
@@ -77,12 +83,52 @@ class CreatePaymentForOrderService
         $order->save();
 
         $shipping_data = OrderAddress::where('order_id', $order->getKey())->first();
-
         $billing_data = Address::where('customer_id', $order->user_id)->first();
-
         $order_products = OrderProduct::where('order_id', $order->getKey())->get();
+        $customer = $customerId ? Customer::find($customerId) : null;
 
         if($paymentStat == 'completed' || $paymentMethod == 'cod') {
+            Log::info('Right before firing event for order: ' . $order->code);
+            try {
+                $shipsyApiKey = env('SHIPSY_API_KEY');
+                
+                if ($shipsyApiKey) {
+                    // Prepare the payload using data fetched within this service
+                    $shipsyPayload = $this->prepareShipsyPayload(
+                        $order, 
+                        $order_products, // Pass the OrderProduct collection
+                        $customer, 
+                        $shipping_data,  // This was $finalOrderAddress
+                        $paymentMethod
+                    );
+                    
+                    Log::info('Preparing to send payload to Shipsy for order: ' . $order->code, ['payload' => $shipsyPayload]);
+
+                    $shipsyApiUrl = "https://app.shipsy.in/api/customer/integration/consignment/upload/softdata/v2";
+                    
+                    $response = Http::withHeaders([
+                        'api-key' => $shipsyApiKey,
+                        'Content-Type' => 'application/json'
+                    ])->post($shipsyApiUrl, $shipsyPayload);
+
+                    if ($response->successful()) {
+                        Log::info('Successfully sent order ' . $order->code . ' to Shipsy.', ['response' => $response->json()]);
+                    } else {
+                        Log::error('Failed to send order ' . $order->code . ' to Shipsy.', [
+                            'status' => $response->status(),
+                            'response' => $response->body()
+                        ]);
+                    }
+                } else {
+                    Log::warning('Shipsy API key is not configured. Skipping API call for order ' . $order->code);
+                }
+
+            } catch (Throwable $e) {
+                Log::error('An exception occurred while trying to send order ' . $order->code . ' to Shipsy.', [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+            }
             // $ch = curl_init();
 
             // $passw = "11F2";
@@ -506,5 +552,96 @@ class CreatePaymentForOrderService
                 'user_id' => !$customerId ? $user->getKey() : $customerId,
             ]);
         }
+    }
+    private function prepareShipsyPayload(Order $order, Collection $orderProducts, $customer, OrderAddress $orderAddress, string $paymentMethod): array {
+        $totalQuantity = 0;
+        $totalWeight = 0.0;
+        $piecesDetail = [];
+
+        foreach ($orderProducts as $orderProduct) {
+            // Fetch the base product to check for dimensions
+            $product = Product::find($orderProduct->product_id);
+            // Decode the options JSON stored in the order product
+            $options = json_decode($orderProduct->options, true);
+
+            $quantityInOrder = $orderProduct->qty;
+            $totalQuantity += $quantityInOrder;
+
+            // Get weight from the order options, default to 0.5
+            $productWeight = is_numeric($options['weight'] ?? null) && $options['weight'] > 0 
+                ? $options['weight'] 
+                : 0.5;
+            $totalWeight += $productWeight * $quantityInOrder;
+
+            // Get price from the order options
+            $unitPrice = Arr::get($options, 'original_price', $orderProduct->price);
+            if (Arr::get($options, 'sale_price')) {
+                $unitPrice = Arr::get($options, 'sale_price');
+            }
+
+            $piecesDetail[] = [
+                "description"        => $orderProduct->product_name, // Use name from OrderProduct
+                "declared_value"     => (string) number_format($unitPrice, 2, '.', ''),
+                "weight"             => (string) $productWeight,
+                // Use dimensions from the base Product, or default to 10
+                "height"             => (string) ($product && is_numeric($product->height) && $product->height > 0 ? $product->height : 10),
+                "length"             => (string) ($product && is_numeric($product->length) && $product->length > 0 ? $product->length : 10),
+                "width"              => (string) ($product && is_numeric($product->wide) && $product->wide > 0 ? $product->wide : 10),
+                // Get SKU from options, fallback to product_id
+                "piece_product_code" => $options['sku'] ?? (string)$orderProduct->product_id,
+                "product_code"       => $options['sku'] ?? (string)$orderProduct->product_id,
+            ];
+        }
+        
+        $originDetails = [
+            "name"           => 'Ahmed Al Maghribi Perfumes',
+            "phone"          => '+965 6690 3786',
+            "address_line_1" => 'Unit No. 07, Sama Mall Plot 83, Al Aqila, Block 5, Kuwait',
+            "pincode"        => '00000',
+            "city"           => 'Kuwait',
+            "state"          => 'Kuwait',
+            "country"        => 'Kuwait'
+        ];
+
+        $payload = [
+            "consignment_type" => "forward",
+            "movement_type" => "forward",
+            "load_type" => "NON-DOCUMENT",
+            // Build description from the OrderProduct collection
+            "description" => implode(" / ", $orderProducts->map(fn($op) => $op->product_name . " x" . $op->qty)->all()),
+            "customer_code" => "",
+            "reference_number" => "",
+            "service_type_id" => "PREMIUM",
+            "cod_amount"       => ($paymentMethod === 'cod') ? (string)number_format($order->amount, 2, '.', '') : "0.00",
+            "invoice_amount"   => (string)number_format($order->sub_total, 2, '.', ''),
+            "invoice_number"   => str_replace('#', '', $order->code),
+            "invoice_date"     => $order->created_at->format('Y-m-d'),
+            "declared_value"   => (float)number_format($order->sub_total, 2, '.', ''),
+            "num_pieces"       => $totalQuantity,
+            "customer_reference_number" => $order->code,
+            "cod_favor_of"     => 'Ahmed Al Maghribi',
+            "cod_collection_mode" => "cash",
+            "dimension_unit" => "cm",
+            "length" => "30",
+            "width" => "20",
+            "height" => "15",
+            "weight_unit" => "kg",
+            "weight"           => (string) ($totalWeight > 0 ? $totalWeight : 0.1),
+            "origin_details"   => $originDetails,
+            "destination_details" => [
+                "name"           => $orderAddress->name,
+                "phone"          => $orderAddress->phone,
+                "alternate_phone"=> "",
+                "address_line_1" => $orderAddress->address,
+                "pincode"        => "00000",
+                "city"           => $orderAddress->city,
+                "state"          => $orderAddress->state,
+                "country"        => $orderAddress->country,
+            ],
+            "return_details"   => $originDetails,
+            "pieces_detail" => $piecesDetail
+        ];
+
+        return $payload;
     }
 }

@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
 
     protected $routeMiddleware = [
         'customLogs' => \App\Http\Middleware\LogRequestsAndResponses::class, // <--- Log requests and responses
+        'restrict.domains' => \App\Http\Middleware\RestrictToDomains::class,
     ];
 }
