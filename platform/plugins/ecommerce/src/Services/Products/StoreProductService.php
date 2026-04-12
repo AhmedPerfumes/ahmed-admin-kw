@@ -31,7 +31,7 @@ class StoreProductService
 {
     public function execute(Request $request, Product $product, bool $forceUpdateAll = false): Product
     {
-        $data = $request->input();
+        $data = $request->except(['images']);
 
         // print_r($data);die;
 
@@ -63,13 +63,23 @@ class StoreProductService
 
         $product->fill($data);
 
-        $images = [];
+        // $images = [];
 
-        if ($imagesInput = $request->input('images', [])) {
-            $images = array_values(array_filter((array) $imagesInput));
+        // if ($imagesInput = $request->input('images', [])) {
+        //     $images = array_values(array_filter((array) $imagesInput));
+        // }
+
+        // $product->images = json_encode($images);
+
+        $imagesInput = $request->input('images', []);
+        $filteredImages = array_values(array_filter((array) $imagesInput));
+
+        if (!empty($filteredImages)) {
+            \Log::info('Images were updated: ' . json_encode($filteredImages));
+            $product->images = json_encode($filteredImages);
         }
 
-        $product->images = json_encode($images);
+        \Log::info('Product Updated');
 
         if (! $hasVariation || $forceUpdateAll) {
             if ($product->sale_price > $product->price) {
