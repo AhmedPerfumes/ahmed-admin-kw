@@ -47,6 +47,7 @@ class ProductCategoryController extends Controller
 
     public function getProductCategoriesTemp(Request $request)
     {
+
         // $customer = Auth::guard('api')->user();
 
         // if (!$customer) {

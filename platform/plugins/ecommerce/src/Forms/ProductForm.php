@@ -12,8 +12,12 @@ use Botble\Base\Forms\FieldOptions\NumberFieldOption;
 use Botble\Base\Forms\FieldOptions\OnOffFieldOption;
 use Botble\Base\Forms\FieldOptions\SelectFieldOption;
 use Botble\Base\Forms\FieldOptions\StatusFieldOption;
+use Botble\Base\Forms\FieldOptions\HtmlFieldOption;
+use Botble\Base\Forms\FieldOptions\DescriptionFieldOption;
 use Botble\Base\Forms\Fields\EditorField;
+use Botble\Base\Forms\Fields\HtmlField;
 use Botble\Base\Forms\Fields\MediaImageField;
+use Botble\Base\Forms\Fields\TextareaField;
 use Botble\Base\Forms\Fields\MediaImagesField;
 use Botble\Base\Forms\Fields\MultiCheckListField;
 use Botble\Base\Forms\Fields\NumberField;
@@ -27,7 +31,7 @@ use Botble\Ecommerce\Enums\GlobalOptionEnum;
 use Botble\Ecommerce\Enums\ProductTypeEnum;
 use Botble\Ecommerce\Facades\EcommerceHelper;
 use Botble\Ecommerce\Facades\ProductCategoryHelper;
-use Botble\Ecommerce\Forms\Fronts\Auth\FieldOptions\TextFieldOption;
+use Botble\Base\Forms\FieldOptions\TextFieldOption;
 use Botble\Ecommerce\Http\Requests\ProductRequest;
 use Botble\Ecommerce\Models\Brand;
 use Botble\Ecommerce\Models\GlobalOption;
@@ -38,6 +42,7 @@ use Botble\Ecommerce\Models\ProductLabel;
 use Botble\Ecommerce\Models\ProductVariation;
 use Botble\Ecommerce\Models\Tax;
 use Botble\Ecommerce\Tables\ProductVariationTable;
+use Botble\Slug\Forms\Fields\PermalinkField;
 
 class ProductForm extends FormAbstract
 {
@@ -70,18 +75,107 @@ class ProductForm extends FormAbstract
             ->setupModel(new Product())
             ->setValidatorClass(ProductRequest::class)
             ->setFormOption('files', true)
-            ->add('name', TextField::class, NameFieldOption::make()->required()->toArray())
+            // ── Name row (EN | AR) ──────────────────────────────────────────
+            ->add('row_name_open', HtmlField::class, HtmlFieldOption::make()->content('<div class="row g-3 align-items-start mb-2">')->toArray())
+            ->add(
+                'name',
+                TextField::class,
+                NameFieldOption::make()
+                    ->required()
+                    ->wrapperAttributes(['class' => 'col-md-6'])
+                    ->toArray()
+            )
+            ->add(
+                'name_ar',
+                TextField::class,
+                TextFieldOption::make()
+                    ->label('Product Name (Arabic / الاسم بالعربية)')
+                    ->placeholder('أدخل اسم المنتج باللغة العربية')
+                    ->wrapperAttributes(['class' => 'col-md-6'])
+                    ->toArray()
+            )
+            ->add('row_name_close', HtmlField::class, HtmlFieldOption::make()->content('</div>')->toArray())
+            ->add('slug', PermalinkField::class, [
+                'model' => $this->getModel(),
+                'colspan' => 'full',
+            ])
+            // ── Description row (EN | AR) ───────────────────────────────────
+            ->add('row_desc_open', HtmlField::class, HtmlFieldOption::make()->content('<div class="row g-3 align-items-start mb-2">')->toArray())
             ->add(
                 'description',
                 EditorField::class,
                 EditorFieldOption::make()
                     ->label(trans('core/base::forms.description'))
-                    ->placeholder(trans('core/base::forms.description_placeholder'))->toArray()
+                    ->placeholder(trans('core/base::forms.description_placeholder'))
+                    ->wrapperAttributes(['class' => 'col-md-6'])
+                    ->toArray()
             )
-            ->add('content', EditorField::class, ContentFieldOption::make()->allowedShortcodes()->toArray())
-            ->add('fragrance_notes', EditorField::class, ContentFieldOption::make()->label('Fragrance Notes')->allowedShortcodes()->toArray())
+            ->add(
+                'description_ar',
+                EditorField::class,
+                EditorFieldOption::make()
+                    ->label('Short Description (Arabic / الوصف القصير بالعربية)')
+                    ->placeholder('أدخل الوصف القصير باللغة العربية')
+                    ->wrapperAttributes(['class' => 'col-md-6'])
+                    ->toArray()
+            )
+            ->add('row_desc_close', HtmlField::class, HtmlFieldOption::make()->content('</div>')->toArray())
+            // ── Content row (EN | AR) ───────────────────────────────────────
+            ->add('row_content_open', HtmlField::class, HtmlFieldOption::make()->content('<div class="row g-3 align-items-start mb-2">')->toArray())
+            ->add(
+                'content',
+                EditorField::class,
+                ContentFieldOption::make()
+                    ->allowedShortcodes()
+                    ->wrapperAttributes(['class' => 'col-md-6'])
+                    ->toArray()
+            )
+            ->add(
+                'content_ar',
+                EditorField::class,
+                ContentFieldOption::make()
+                    ->label('Content (Arabic / المحتوى بالعربية)')
+                    ->allowedShortcodes()
+                    ->wrapperAttributes(['class' => 'col-md-6'])
+                    ->toArray()
+            )
+            ->add('row_content_close', HtmlField::class, HtmlFieldOption::make()->content('</div>')->toArray())
+            // ── Fragrance Notes Profile ─────────────────────────────────
+            ->add('notes_tabs_open', HtmlField::class, HtmlFieldOption::make()->content('
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h4 class="card-title mb-0">Fragrance Notes Profile</h4>
+                    </div>
+                    <div class="card-body">
+            ')->toArray())
+
+            // --- TOP NOTES ---
+            ->add('top_notes_pane_open', HtmlField::class, HtmlFieldOption::make()->content('<h5 class="mb-2">Top Notes</h5><div class="row g-3">')->toArray())
+            ->add('top_note_image', MediaImageField::class, MediaImageFieldOption::make()->label('Top Note Image')->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('top_note_description', TextareaField::class, DescriptionFieldOption::make()->label('Top Note Description')->placeholder('Enter top note description...')->maxLength(10000)->rows(4)->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('top_note_description_ar', TextareaField::class, DescriptionFieldOption::make()->label('Top Note Description (Arabic)')->placeholder('أدخل وصف المكونات العليا باللغة العربية...')->maxLength(10000)->rows(4)->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('top_notes_pane_close', HtmlField::class, HtmlFieldOption::make()->content('</div><hr class="my-4">')->toArray())
+
+            // --- HEART NOTES ---
+            ->add('heart_notes_pane_open', HtmlField::class, HtmlFieldOption::make()->content('<h5 class="mb-2">Heart Notes</h5><div class="row g-3">')->toArray())
+            ->add('heart_note_image', MediaImageField::class, MediaImageFieldOption::make()->label('Heart Note Image')->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('heart_note_description', TextareaField::class, DescriptionFieldOption::make()->label('Heart Note Description')->placeholder('Enter heart note description...')->maxLength(10000)->rows(4)->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('heart_note_description_ar', TextareaField::class, DescriptionFieldOption::make()->label('Heart Note Description (Arabic)')->placeholder('أدخل وصف المكونات الوسطى باللغة العربية...')->maxLength(10000)->rows(4)->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('heart_notes_pane_close', HtmlField::class, HtmlFieldOption::make()->content('</div><hr class="my-4">')->toArray())
+
+            // --- BASE NOTES ---
+            ->add('base_notes_pane_open', HtmlField::class, HtmlFieldOption::make()->content('<h5 class="mb-2">Base Notes</h5><div class="row g-3">')->toArray())
+            ->add('base_note_image', MediaImageField::class, MediaImageFieldOption::make()->label('Base Note Image')->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('base_note_description', TextareaField::class, DescriptionFieldOption::make()->label('Base Note Description')->placeholder('Enter base note description...')->maxLength(10000)->rows(4)->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('base_note_description_ar', TextareaField::class, DescriptionFieldOption::make()->label('Base Note Description (Arabic)')->placeholder('أدخل وصف المكونات الأساسية باللغة العربية...')->maxLength(10000)->rows(4)->wrapperAttributes(['class' => 'col-md-4'])->toArray())
+            ->add('base_notes_pane_close', HtmlField::class, HtmlFieldOption::make()->content('</div>')->toArray())
+
+            ->add('notes_tabs_close', HtmlField::class, HtmlFieldOption::make()->content('
+                    </div>
+                </div>
+            ')->toArray())
             ->add('images[]', MediaImagesField::class, [
-                'label' => trans('plugins/ecommerce::products.form.image'),
+                'label' => 'Product Images',
                 'values' => $productId ? $this->getModel()->images : [],
             ])
             ->addMetaBoxes([

@@ -15,30 +15,33 @@ class RestrictToDomains
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $allowedOrigins = [
-            'http://localhost:3000',
-        ];
+        // $allowedOrigins = [
+        //     'http://localhost:3000',
+        // ];
 
-        $origin = $request->header('origin');
-        $referer = $request->header('referer');
+        // $origin = $request->header('origin');
+        // $referer = $request->header('referer');
 
-        // echo $request->header;
+        // // echo $request->header;
 
-        $isAllowed = false;
+        // $isAllowed = false;
 
-        foreach ($allowedOrigins as $allowed) {
-            if (
-                ($origin && str_starts_with($origin, $allowed)) ||
-                ($referer && str_starts_with($referer, $allowed))
-            ) {
-                $isAllowed = true;
-                break;
-            }
-        }
+        // foreach ($allowedOrigins as $allowed) {
+        //     if (
+        //         ($origin && str_starts_with($origin, $allowed)) ||
+        //         ($referer && str_starts_with($referer, $allowed))
+        //     ) {
+        //         $isAllowed = true;
+        //         break;
+        //     }
+        // }
 
-        if (!$isAllowed) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+        // if (!$isAllowed) {
+
+
+        
+        //     return response()->json(['error' => 'Unauthorized'], 401);
+        // }
         return $next($request);
     }
 }
