@@ -159,6 +159,7 @@
         },
         {
             "name": "bacon/bacon-qr-code",
+<<<<<<< Updated upstream
             "version": "v3.0.1",
             "source": {
                 "type": "git",
@@ -169,6 +170,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/f9cc1f52b5a463062251d666761178dbdb6b544f",
                 "reference": "f9cc1f52b5a463062251d666761178dbdb6b544f",
+=======
+            "version": "v3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Bacon/BaconQrCode.git",
+                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
+                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -208,9 +221,15 @@
             "homepage": "https://github.com/Bacon/BaconQrCode",
             "support": {
                 "issues": "https://github.com/Bacon/BaconQrCode/issues",
+<<<<<<< Updated upstream
                 "source": "https://github.com/Bacon/BaconQrCode/tree/v3.0.1"
             },
             "time": "2024-10-01T13:55:55+00:00"
+=======
+                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.1.1"
+            },
+            "time": "2026-04-05T21:06:35+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -496,7 +515,11 @@
         },
         {
             "name": "botble/get-started",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/get-started",
@@ -522,7 +545,11 @@
         },
         {
             "name": "botble/installer",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/installer",
@@ -551,7 +578,11 @@
         },
         {
             "name": "botble/menu",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/menu",
@@ -584,7 +615,11 @@
         },
         {
             "name": "botble/optimize",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/optimize",
@@ -616,7 +651,11 @@
         },
         {
             "name": "botble/page",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/page",
@@ -646,7 +685,11 @@
         },
         {
             "name": "botble/platform",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/core",
@@ -752,7 +795,11 @@
         },
         {
             "name": "botble/plugin-management",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/plugin-management",
@@ -781,7 +828,11 @@
         },
         {
             "name": "botble/revision",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/revision",
@@ -810,7 +861,11 @@
         },
         {
             "name": "botble/seo-helper",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/seo-helper",
@@ -843,7 +898,11 @@
         },
         {
             "name": "botble/shortcode",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/shortcode",
@@ -875,7 +934,11 @@
         },
         {
             "name": "botble/sitemap",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/sitemap",
@@ -904,7 +967,11 @@
         },
         {
             "name": "botble/slug",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/slug",
@@ -936,7 +1003,11 @@
         },
         {
             "name": "botble/theme",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/theme",
@@ -977,7 +1048,11 @@
         },
         {
             "name": "botble/widget",
+<<<<<<< Updated upstream
             "version": "dev-dev",
+=======
+            "version": "dev-master",
+>>>>>>> Stashed changes
             "dist": {
                 "type": "path",
                 "url": "./platform/packages/widget",
@@ -3970,6 +4045,7 @@
         },
         {
             "name": "laravel/socialite",
+<<<<<<< Updated upstream
             "version": "v5.21.0",
             "source": {
                 "type": "git",
@@ -3980,22 +4056,44 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/socialite/zipball/d83639499ad14985c9a6a9713b70073300ce998d",
                 "reference": "d83639499ad14985c9a6a9713b70073300ce998d",
+=======
+            "version": "v5.30.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/socialite.git",
+                "reference": "caf714f55d51ab0d914b40033d8b0f489d6219cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/caf714f55d51ab0d914b40033d8b0f489d6219cc",
+                "reference": "caf714f55d51ab0d914b40033d8b0f489d6219cc",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "firebase/php-jwt": "^6.4|^7.0",
                 "guzzlehttp/guzzle": "^6.0|^7.0",
+<<<<<<< Updated upstream
                 "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
                 "illuminate/http": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
                 "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+=======
+                "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/http": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+>>>>>>> Stashed changes
                 "league/oauth1-client": "^1.11",
                 "php": "^7.2|^8.0",
                 "phpseclib/phpseclib": "^3.0"
             },
             "require-dev": {
                 "mockery/mockery": "^1.0",
+<<<<<<< Updated upstream
                 "orchestra/testbench": "^4.18|^5.20|^6.47|^7.55|^8.36|^9.15|^10.8",
+=======
+                "orchestra/testbench": "^4.18|^5.20|^6.47|^7.55|^8.36|^9.15|^10.8|^11.0",
+>>>>>>> Stashed changes
                 "phpstan/phpstan": "^1.12.23",
                 "phpunit/phpunit": "^8.0|^9.3|^10.4|^11.5|^12.0"
             },
@@ -4038,7 +4136,11 @@
                 "issues": "https://github.com/laravel/socialite/issues",
                 "source": "https://github.com/laravel/socialite"
             },
+<<<<<<< Updated upstream
             "time": "2025-05-19T12:56:37+00:00"
+=======
+            "time": "2026-08-13T23:01:33+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "laravel/tinker",
@@ -7322,6 +7424,7 @@
         },
         {
             "name": "razorpay/razorpay",
+<<<<<<< Updated upstream
             "version": "2.9.1",
             "source": {
                 "type": "git",
@@ -7332,6 +7435,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/razorpay/razorpay-php/zipball/d5e49ef12c4862f6bc8003f87f79b942a9dd3a8b",
                 "reference": "d5e49ef12c4862f6bc8003f87f79b942a9dd3a8b",
+=======
+            "version": "2.9.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/razorpay/razorpay-php.git",
+                "reference": "b724515d548083b9fba52e61f47c0c24136ab181"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/razorpay/razorpay-php/zipball/b724515d548083b9fba52e61f47c0c24136ab181",
+                "reference": "b724515d548083b9fba52e61f47c0c24136ab181",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -7383,7 +7498,11 @@
                 "issues": "https://github.com/Razorpay/razorpay-php/issues",
                 "source": "https://github.com/Razorpay/razorpay-php"
             },
+<<<<<<< Updated upstream
             "time": "2025-03-20T12:51:47+00:00"
+=======
+            "time": "2026-06-08T08:12:20+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "rmccue/requests",
@@ -7878,6 +7997,7 @@
         },
         {
             "name": "symfony/cache",
+<<<<<<< Updated upstream
             "version": "v6.4.23",
             "source": {
                 "type": "git",
@@ -7888,6 +8008,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/cache/zipball/c88690befb8d4a85dc321fb78d677507f5eb141b",
                 "reference": "c88690befb8d4a85dc321fb78d677507f5eb141b",
+=======
+            "version": "v6.4.47",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache.git",
+                "reference": "7ce0de35c828d29a5602134cdcf82b9c301b198f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/7ce0de35c828d29a5602134cdcf82b9c301b198f",
+                "reference": "7ce0de35c828d29a5602134cdcf82b9c301b198f",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -7910,7 +8042,7 @@
                 "symfony/cache-implementation": "1.1|2.0|3.0"
             },
             "require-dev": {
-                "cache/integration-tests": "dev-master",
+                "cache/integration-tests": "^0.18",
                 "doctrine/dbal": "^2.13.1|^3|^4",
                 "predis/predis": "^1.1|^2.0",
                 "psr/simple-cache": "^1.0|^2.0|^3.0",
@@ -7954,7 +8086,11 @@
                 "psr6"
             ],
             "support": {
+<<<<<<< Updated upstream
                 "source": "https://github.com/symfony/cache/tree/v6.4.23"
+=======
+                "source": "https://github.com/symfony/cache/tree/v6.4.47"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -7974,7 +8110,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< Updated upstream
             "time": "2025-06-27T18:31:36+00:00"
+=======
+            "time": "2026-09-29T12:25:26+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "symfony/cache-contracts",
@@ -10524,6 +10664,7 @@
         },
         {
             "name": "symfony/var-exporter",
+<<<<<<< Updated upstream
             "version": "v6.4.22",
             "source": {
                 "type": "git",
@@ -10534,6 +10675,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/var-exporter/zipball/f28cf841f5654955c9f88ceaf4b9dc29571988a9",
                 "reference": "f28cf841f5654955c9f88ceaf4b9dc29571988a9",
+=======
+            "version": "v6.4.45",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-exporter.git",
+                "reference": "a4e458999ee554a667cd19227f0b97a751bd61e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/a4e458999ee554a667cd19227f0b97a751bd61e6",
+                "reference": "a4e458999ee554a667cd19227f0b97a751bd61e6",
+>>>>>>> Stashed changes
                 "shasum": ""
             },
             "require": {
@@ -10581,7 +10734,11 @@
                 "serialize"
             ],
             "support": {
+<<<<<<< Updated upstream
                 "source": "https://github.com/symfony/var-exporter/tree/v6.4.22"
+=======
+                "source": "https://github.com/symfony/var-exporter/tree/v6.4.45"
+>>>>>>> Stashed changes
             },
             "funding": [
                 {
@@ -10601,7 +10758,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< Updated upstream
             "time": "2025-05-14T13:00:13+00:00"
+=======
+            "time": "2026-08-23T09:39:49+00:00"
+>>>>>>> Stashed changes
         },
         {
             "name": "tightenco/ziggy",
@@ -14410,6 +14571,6 @@
         "ext-pdo": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
