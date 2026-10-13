@@ -1884,6 +1884,59 @@ class ProductController extends Controller
 
         return $response;
     }
+
+    public function cashbackRules(Request $request) {
+        try {
+            $promotions = DB::table('promotions')
+                ->join('cashback_rules', 'promotions.id', '=', 'cashback_rules.promotion_id')
+                ->where('promotions.type', 'cashback')
+                ->where('promotions.start_date', '<=', now())
+                ->where('promotions.end_date', '>=', now())
+                ->where('promotions.isDeleted', false)
+                ->select(
+                    'promotions.id as promotion_id',
+                    'promotions.name',
+                    'cashback_rules.id as rule_id',
+                    'cashback_rules.product_type',
+                    'cashback_rules.min_qty',
+                    'cashback_rules.cashback_percentage',
+                    'cashback_rules.cashback_amount'
+                )
+                ->get();
+
+            if ($promotions->isEmpty()) {
+                return response()->json(['cashbackRules' => []], 200);
+            }
+
+            $results = [];
+            foreach ($promotions as $promo) {
+                $productIds = [];
+                if ($promo->product_type === 'group') {
+                    $productIds = DB::table('cashback_products')
+                        ->where('cashback_rule_id', $promo->rule_id)
+                        ->pluck('product_id')
+                        ->map(fn($id) => (int) $id)
+                        ->toArray();
+                }
+
+                $results[] = [
+                    'promotion_id' => $promo->promotion_id,
+                    'rule_id' => $promo->rule_id,
+                    'name' => $promo->name,
+                    'product_type' => $promo->product_type,
+                    'min_qty' => (int) ($promo->min_qty ?? 1),
+                    'cashback_percentage' => !is_null($promo->cashback_percentage) ? (float) $promo->cashback_percentage : null,
+                    'cashback_amount' => !is_null($promo->cashback_amount) ? (float) $promo->cashback_amount : null,
+                    'product_ids' => $productIds,
+                ];
+            }
+
+            return response()->json(['cashbackRules' => $results], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch cashback rules', 'message' => $e->getMessage()], 500);
+        }
+    }
+
     private function determineSelectionRule($rule, $promotionName, $hasFreeProducts)
     {
         $buyQty = $rule->buy_quantity ?? 1;

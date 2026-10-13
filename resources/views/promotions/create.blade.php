@@ -28,7 +28,7 @@
                                     <option value="discount" {{ isset($promotion) && $promotion->type === 'discount' ? 'selected' : '' }}>Discount</option>
                                     <option value="coupon" {{ isset($promotion) && $promotion->type === 'coupon' ? 'selected' : '' }}>Coupon</option>
                                     <option value="foc" {{ isset($promotion) && $promotion->type === 'foc' ? 'selected' : '' }}>Free of Charge</option>
-                                     <option value="cashback" {{ isset($promotion) && $promotion->type === 'cashback' ? 'selected' : '' }}>Cashback</option>
+                                     <option value="cashback" {{ isset($promotion) && $promotion->type === 'cashback' ? 'selected' : '' }}>Quantity Discount (Cashback)</option>
                                 </select>
                                 @if (isset($promotion))
                                     <input type="hidden" name="type" value="{{ $promotion->type }}">
@@ -445,13 +445,14 @@
                                     <label for="cashback_product_type" class="form-label">Apply Cashback (Product Type)</label>
                                     <select name="conditions[cashback][product_type]" id="cashback_product_type" class="form-select">
                                         <option value="all" {{ old('conditions.cashback.product_type', $promotionData['cashback_rule']->product_type ?? '') == 'all' ? 'selected' : '' }}>All Products</option>
-                                        <option value="group" {{ old('conditions.cashback.product_type', $promotionData['cashback_rule']->product_type ?? '') == 'group' ? 'selected' : '' }}>Group Products</option>
+                                        <option value="group" {{ old('conditions.cashback.product_type', $promotionData['cashback_rule']->product_type ?? '') == 'group' ? 'selected' : '' }}>Specific Group Products</option>
                                     </select>
+                                    <small class="text-muted">Choose whether this campaign applies to all catalog products or a selected group of products.</small>
                                 </div>
 
                                 <!-- Group Products (only visible if product_type == group) -->
                                 <div class="mb-3" id="cashback_product_group_field" style="display: {{ old('conditions.cashback.product_type', $promotionData['cashback_rule']->product_type ?? '') == 'group' ? 'block' : 'none' }};">
-                                    <label for="cashback_group_product_ids" class="form-label">Products</label>
+                                    <label for="cashback_group_product_ids" class="form-label">Select Eligible Products</label>
                                     <select name="conditions[cashback][group_product_ids][]" id="cashback_group_product_ids" multiple class="form-select">
                                         @foreach ($products as $product)
                                             <option value="{{ $product['id'] }}"
@@ -460,41 +461,48 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                    <small class="text-muted">Select the specific products that qualify for this campaign.</small>
                                 </div>
 
-                                <!-- Cashback Type and Value -->
+                                <!-- Minimum Quantity (Limit) -->
                                 <div class="mb-3">
-                                    <label for="cashback_type" class="form-label">Cashback Type</label>
+                                    <label for="cashback_min_qty" class="form-label">Minimum Purchase Quantity (Buy X or more)</label>
+                                    <input type="number" min="1" step="1" name="conditions[cashback][min_qty]" id="cashback_min_qty" class="form-control"
+                                           value="{{ old('conditions.cashback.min_qty', $promotionData['cashback_rule']->min_qty ?? '') }}"
+                                           placeholder="e.g. 2 for buy 2 or more" required>
+                                    <small class="text-muted">Customer must add at least this many eligible products to cart to unlock the discount.</small>
+                                </div>
+
+                                <!-- Discount Type and Value -->
+                                <div class="mb-3">
+                                    <label for="cashback_type" class="form-label">Discount Type</label>
                                     <select name="rewards[cashback][type]" id="cashback_type" class="form-control">
                                         @php
-                                            $persistedCashbackType = old('rewards.cashback.type', isset($promotionData['cashback_rule'])
-                                                ? (!is_null($promotionData['cashback_rule']->cashback_percentage) ? 'percentage' : 'amount')
-                                                : 'percentage');
+                                             $persistedCashbackType = old('rewards.cashback.type', isset($promotionData['cashback_rule'])
+                                                 ? (!is_null($promotionData['cashback_rule']->cashback_percentage) ? 'percentage' : 'amount')
+                                                 : 'percentage');
                                         @endphp
-                                        <option value="percentage" {{ $persistedCashbackType === 'percentage' ? 'selected' : '' }}>Percentage</option>
-                                        <option value="amount" {{ $persistedCashbackType === 'amount' ? 'selected' : '' }}>Amount</option>
+                                        <option value="percentage" {{ $persistedCashbackType === 'percentage' ? 'selected' : '' }}>Percentage Discount (%)</option>
+                                        <option value="amount" {{ $persistedCashbackType === 'amount' ? 'selected' : '' }}>Fixed Amount Discount</option>
                                     </select>
                                 </div>
 
                                 <div class="mb-3 cashback-field" id="cashback_percent_field"
-                                     style="{{ (old('rewards.cashback.type', isset($promotionData['cashback_rule']) ? (!is_null($promotionData['cashback_rule']->cashback_percentage) ? 'percentage' : 'amount') : 'percentage') == 'percentage') ? '' : 'display:none;' }}">
-                                    <label for="cashback_percentage" class="form-label">Cashback Percent</label>
+                                      style="{{ (old('rewards.cashback.type', isset($promotionData['cashback_rule']) ? (!is_null($promotionData['cashback_rule']->cashback_percentage) ? 'percentage' : 'amount') : 'percentage') == 'percentage') ? '' : 'display:none;' }}">
+                                    <label for="cashback_percentage" class="form-label">Discount Percentage (%) on Subtotal</label>
                                     <input type="number" step="0.01" name="rewards[cashback][percentage]" id="cashback_percentage" class="form-control"
-                                           value="{{ old('rewards.cashback.percentage', isset($promotionData['cashback_rule']) && !is_null($promotionData['cashback_rule']->cashback_percentage) ? $promotionData['cashback_rule']->cashback_percentage : '') }}">
+                                           value="{{ old('rewards.cashback.percentage', isset($promotionData['cashback_rule']) && !is_null($promotionData['cashback_rule']->cashback_percentage) ? $promotionData['cashback_rule']->cashback_percentage : '') }}"
+                                           placeholder="e.g. 15 for 15% discount">
+                                    <small class="text-muted">Percentage discount deducted from eligible products subtotal.</small>
                                 </div>
 
                                 <div class="mb-3 cashback-field" id="cashback_amount_field"
-                                     style="{{ (old('rewards.cashback.type', isset($promotionData['cashback_rule']) ? (!is_null($promotionData['cashback_rule']->cashback_percentage) ? 'percentage' : 'amount') : 'percentage') == 'amount') ? '' : 'display:none;' }}">
-                                    <label for="cashback_amount" class="form-label">Cashback Amount</label>
+                                      style="{{ (old('rewards.cashback.type', isset($promotionData['cashback_rule']) ? (!is_null($promotionData['cashback_rule']->cashback_percentage) ? 'percentage' : 'amount') : 'percentage') == 'amount') ? '' : 'display:none;' }}">
+                                    <label for="cashback_amount" class="form-label">Discount Amount on Subtotal</label>
                                     <input type="number" step="0.01" name="rewards[cashback][amount]" id="cashback_amount" class="form-control"
-                                           value="{{ old('rewards.cashback.amount', isset($promotionData['cashback_rule']) && is_null($promotionData['cashback_rule']->cashback_percentage) ? ($promotionData['cashback_rule']->cashback_amount ?? '') : '') }}">
-                                </div>
-
-                                <!-- Cashback Duration -->
-                                <div class="mb-3">
-                                    <label for="cashback_duration" class="form-label">Duration (days)</label>
-                                    <input type="number" min="1" step="1" name="conditions[cashback][duration]" id="cashback_duration" class="form-control"
-                                           value="{{ old('conditions.cashback.duration', isset($promotionData['cashback_rule']) ? ($promotionData['cashback_rule']->duration ?? '') : '') }}">
+                                           value="{{ old('rewards.cashback.amount', isset($promotionData['cashback_rule']) && is_null($promotionData['cashback_rule']->cashback_percentage) ? ($promotionData['cashback_rule']->cashback_amount ?? '') : '') }}"
+                                           placeholder="e.g. 50">
+                                    <small class="text-muted">Fixed amount discount deducted from subtotal.</small>
                                 </div>
                             </div>
 
@@ -847,6 +855,15 @@ if (promotionType === 'coupon') {
 }
                 // Validate FOC
                 if (promotionType === 'cashback') {
+                    const minQtyInput = document.getElementById('cashback_min_qty');
+                    const minQty = parseInt(minQtyInput ? minQtyInput.value : '', 10);
+                    if (isNaN(minQty) || minQty < 1) {
+                        event.preventDefault();
+                        alert('Minimum Purchase Quantity must be at least 1.');
+                        if (minQtyInput) minQtyInput.focus();
+                        return;
+                    }
+
                     // Validate cashback value (percentage or amount)
                     const cashbackType = document.getElementById('cashback_type').value;
                     let cashbackValue;

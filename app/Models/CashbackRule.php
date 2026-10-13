@@ -10,8 +10,8 @@ class CashbackRule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'promotion_id', 'customer_type', 'product_type',
-        'cashback_percentage', 'cashback_amount','duration',
+        'promotion_id', 'customer_type', 'product_type', 'min_qty',
+        'cashback_percentage', 'cashback_amount', 'duration',
     ];
 
     public function promotion() { return $this->belongsTo(Promotion::class); }

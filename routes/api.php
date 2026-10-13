@@ -40,6 +40,7 @@ Route::middleware(['customLogs', 'restrict.domains'])->group(function () {
     Route::post('/products/live-status', [ProductController::class, 'getProductsLiveStatus']);
     Route::get('/bogoProducts', [ProductController::class, 'bogoProducts']);
     Route::get('/freeGiftProducts', [ProductController::class, 'freeGiftProducts']);
+    Route::get('/cashbackRules', [ProductController::class, 'cashbackRules']);
     
     // All Product Routes
     Route::withoutMiddleware('customLogs')->post('/allProducts', [ProductController::class, 'getAllProducts']);

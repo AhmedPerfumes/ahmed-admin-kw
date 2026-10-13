@@ -129,10 +129,11 @@
                                                     @endforeach
 
                                                 @elseif($type === 'cashback')
-                                                    <strong>Cashback:</strong>
+                                                    <strong>Quantity Discount:</strong>
                                                     @php $rule = $promotion->cashbackRule; @endphp
                                                     @if($rule)
-                                                        <p>Product Type: {{ $rule->product_type }}</p>
+                                                        <p>Product Type: {{ $rule->product_type === 'group' ? 'Group Products' : 'All Products' }}</p>
+                                                        <p>Min Qty: {{ $rule->min_qty ?? 1 }}</p>
                                                         @if($rule->product_type === 'group')
                                                             <p>Products:
                                                                 @foreach($rule->products as $p)
@@ -146,12 +147,9 @@
                                                             $amountLabel = rtrim(rtrim(number_format((float)($rule->cashback_amount ?? 0), 2, '.', ''), '0'), '.');
                                                         @endphp
                                                         @if($hasPercent)
-                                                            <p>Cashback: {{ $percentLabel }}%</p>
+                                                            <p>Discount: {{ $percentLabel }}%</p>
                                                         @else
-                                                            <p>Cashback: {{ $amountLabel }}</p>
-                                                        @endif
-                                                        @if(!empty($rule->duration))
-                                                            <p>Duration: {{ $rule->duration }} day(s)</p>
+                                                            <p>Discount: {{ $amountLabel }}</p>
                                                         @endif
                                                     @else
                                                         <p class="text-muted">No cashback rule found.</p>

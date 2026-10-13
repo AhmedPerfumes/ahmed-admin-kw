@@ -39,6 +39,10 @@
                         @if ($orderProduct->is_gift == 1)
                             <p class="mb-0">(<strong>Free Gift</strong>)</p>
                         @endif
+
+                        @if (!empty($orderProduct->campaign))
+                            <p class="mb-0 text-success"><small>({{ $orderProduct->campaign }})</small></p>
+                        @endif
                     </div>
 
                     @if ($attributes = Arr::get($orderProduct->options, 'attributes'))

@@ -363,6 +363,47 @@ class OrderController extends Controller
             // array_push($barcodes, $exisProduct->barcode);
         }
 
+        $cashback = Promotion::where('type', 'cashback')
+            ->where('start_date', '<=', now())
+            ->where('end_date', '>=', now())
+            ->where('isDeleted', false)
+            ->with(['cashbackRule.products'])
+            ->first();
+
+        $isCashbackEligible = false;
+        $cashbackDiscountPercent = 0;
+        $cashbackProductType = null;
+        $cashbackProductIds = [];
+
+        if ($cashback && $cashback->cashbackRule) {
+            $rule = $cashback->cashbackRule;
+            $cashbackDiscountPercent = (float) ($rule->cashback_percentage ?? 0);
+            $cashbackProductType = $rule->product_type; // 'all' or 'group'
+            $minQty = (int) ($rule->min_qty ?? 1);
+
+            if ($cashbackProductType === 'group') {
+                $cashbackProductIds = $rule->products->pluck('product_id')->map(fn($id) => (int)$id)->toArray();
+            }
+
+            // Count total eligible item quantity in the cart
+            $eligibleQty = 0;
+            foreach ($request->input('products', []) as $p) {
+                if (!empty($p['is_gift']) || (isset($p['type']) && in_array($p['type'], ['foc', 'bogo']))) {
+                    continue;
+                }
+                $pid = (int) $p['product_id'];
+                $pQty = (int) ($p['quantity'] ?? 1);
+
+                if ($cashbackProductType === 'all' || in_array($pid, $cashbackProductIds)) {
+                    $eligibleQty += $pQty;
+                }
+            }
+
+            if ($eligibleQty >= $minQty && $cashbackDiscountPercent > 0) {
+                $isCashbackEligible = true;
+            }
+        }
+
         $customer_id = $request->input('customer_id');
 
         if (!$customer_id) {
@@ -908,6 +949,18 @@ class OrderController extends Controller
                     $total_amount = $price * $quantity;
                     $discount_percent = 0;
                     $discount_amount = 0.00;
+                    $campaign = null;
+
+                    // Apply quantity / cashback discount if eligible
+                    if ($isCashbackEligible && ($cashbackProductType === 'all' || in_array((int)$product['product_id'], $cashbackProductIds))) {
+                        $discount_percent = $cashbackDiscountPercent;
+                        $discount_amount = ($total_amount / 100) * $discount_percent;
+                        $campaign = $cashback->name ?? 'Cashback Promotion';
+                        $exisProduct->discount_percent = $discount_percent;
+                        $exisProduct->discount_amount = $discount_amount;
+                        $exisProduct->campaign = $campaign;
+                    }
+
                     $net_amount = $total_amount - $discount_amount;
                     $tax_amount = ($net_amount / 100) * $tax->percentage;
                     $gross_amount = $net_amount + $tax_amount;
@@ -933,6 +986,7 @@ class OrderController extends Controller
                         'product_category' => $product['category_name'],
                         'product_subcategory' => isset($product['subcategory_name']) ? $product['subcategory_name'] : '',
                         'vat' => $tax->percentage,
+                        'campaign' => $campaign,
                     ];
                     $loopSubTotal += $gross_amount;
                     $loopTaxTotal += $tax_amount;
@@ -1432,7 +1486,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Order not found']);
         }
 
-        $prod = OrderProduct::select('id', 'id as product_id', 'product_name', 'qty', 'price', 'order_id', 'is_gift', 'discount_percent', 'discount_amount', 'gross_amount', 'product_category')->where('ec_order_product.order_id', $order->id)->get();
+        $prod = OrderProduct::select('id', 'id as product_id', 'product_name', 'qty', 'price', 'order_id', 'is_gift', 'discount_percent', 'discount_amount', 'gross_amount', 'product_category', 'campaign')->where('ec_order_product.order_id', $order->id)->get();
 
         return response()->json([
             'message'          => 'Tracking Details Fetched successfully',
@@ -1470,7 +1524,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Order not found']);
         }
 
-        $prod = OrderProduct::select('id', 'id as product_id', 'product_name', 'qty', 'price', 'order_id', 'is_gift', 'discount_percent', 'discount_amount', 'gross_amount', 'product_category')->where('ec_order_product.order_id', $order->id)->get();
+        $prod = OrderProduct::select('id', 'id as product_id', 'product_name', 'qty', 'price', 'order_id', 'is_gift', 'discount_percent', 'discount_amount', 'gross_amount', 'product_category', 'campaign')->where('ec_order_product.order_id', $order->id)->get();
 
         return response()->json([
             'message'          => 'Details Fetched successfully',

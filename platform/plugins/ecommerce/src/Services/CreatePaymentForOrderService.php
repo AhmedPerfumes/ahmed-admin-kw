@@ -379,11 +379,12 @@ if (!$token) {
                                                                                                                 </tr>';
 
                                                                                                                 foreach ($order_products as $key => $value) {
+                                                                                                                     $campaignHtml = !empty($value->campaign) ? '<br><small style="color:#28a745;font-weight:600;">(' . $value->campaign . ')</small>' : '';
                                                                                                                     if($value->discount_percent != 0) {
                                                                                                                         if($value->is_gift == 1) {
                                                                                                                              $body .= '<tr>
                                                                                                                                 <td style="color:#636363;text-align:left;vertical-align:middle;padding:12px;border:1px solid #E5E5E5;">
-                                                                                                                                    <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">'.$value->product_name.'</div>
+                                                                                                                                    <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">'.$value->product_name.$campaignHtml.'</div>
                                                                                                                                 </td>
                                                                                                                                 <td style="color:#636363;text-align:left;vertical-align:middle;padding:12px;border:1px solid #E5E5E5;">
                                                                                                                                     <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">'.$value->qty.'</div>
@@ -439,8 +440,23 @@ if (!$token) {
                                                                                                                     <td style="color:#636363;text-align:left;vertical-align:middle;padding:12px;border-width:4px 1px 1px 1px;border-style:solid;border-color:#E5E5E5;">
                                                                                                                         <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">&#x062F;&#x002E;&#x0643;'.number_format((float) ($order->sub_total), 3, '.', '').'</div>
                                                                                                                     </td>
-                                                                                                                </tr>
-                                                                                                                <tr>
+                                                                                                                </tr>';
+
+                                                                                                                if ((float)$order->discount_amount > 0) {
+                                                                                                                    $discountDesc = !empty($order->discount_description)
+                                                                                                                        ? $order->discount_description
+                                                                                                                        : (!empty($order->coupon_code) ? $order->coupon_code : 'Discount');
+
+                                                                                                                    $body .= '<tr>
+                                                                                                                        <th style="color:#636363;text-align:left;vertical-align:middle;padding:12px;border:1px solid #E5E5E5;" colspan="2">
+                                                                                                                            <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">Discount (' . $discountDesc . '):</div>
+                                                                                                                        </th>
+                                                                                                                        <td style="color:#28a745;text-align:left;vertical-align:middle;padding:12px;border:1px solid #E5E5E5;">
+                                                                                                                            <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">-&#x062F;&#x002E;&#x0643;' . number_format((float)$order->discount_amount, 3, '.', '') . '</div>
+                                                                                                                        </td>
+                                                                                                                    </tr>';
+                                                                                                                }
+                                                                                                                $body .= '<tr>
                                                                                                                     <th style="color:#636363;text-align:left;vertical-align:middle;padding:12px;border:1px solid #E5E5E5;" colspan="2">
                                                                                                                         <div style="font-family:Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;text-align:left;">Shipping:</div>
                                                                                                                     </th>
